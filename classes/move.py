@@ -1,9 +1,8 @@
 from piece import Piece
 from grid import Grid
 
-
 class Move:
-    def __init__(self, piece: Piece, start: Grid, dest: Grid):
+    def __init__(self, piece: Piece, origin: Grid, dest: Grid):
         self.piece = piece
-        self.start = start
+        self.origin = origin
         self.dest = dest
