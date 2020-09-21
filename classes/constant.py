@@ -1,4 +1,4 @@
-MIN_COL = 'A'
-MAX_COL = 'I'
 MIN_ROW = 1
 MAX_ROW = 10
+MIN_COL = 1
+MAX_COL = 9
