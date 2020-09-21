@@ -1,12 +1,8 @@
-from enum import Enum
+from enum import IntEnum
 
-class Camp(Enum):
+class Camp(IntEnum):
     CHO = 0
     HAN = 1
 
-    def __init__(self, campNum):
-        self.campNum = campNum
-
-    @property
     def opponent(self):
-        return Camp(1-self.campNum)
+        return Camp(1-self)
