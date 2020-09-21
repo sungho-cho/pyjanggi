@@ -31,14 +31,17 @@ class Board:
     def put(self, row: int, col: int, piece: Piece):
         self.__board[row][col] = piece
 
-    def get(self, row: int, col: int):
-        return self.__board[row][col]
-
     def putAll(self, board):
         for row in range(constant.MIN_ROW, constant.MAX_ROW+1):
             for col in range(constant.MIN_COL, constant.MAX_COL+1):
                 if board.get(row, col):
                     self.__board[row][col] = board.get(row, col)
+
+    def get(self, row: int, col: int):
+        return self.__board[row][col]
+    
+    def remove(self, row: int, col: int):
+        self.__board[row][col] = None
 
     def rotate(self):
         newBoard = [[None for i in range(self.numCols+1)] 
