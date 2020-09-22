@@ -38,7 +38,7 @@ class Piece:
     def setCamp(self, camp: Camp):
         self.camp = camp
 
-    def possibleMoves(self):
+    def getJumpyMoves(self):
         moves = []
 
         if self.pieceType == PieceType.HORSE:

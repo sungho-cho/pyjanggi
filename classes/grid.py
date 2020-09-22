@@ -2,7 +2,7 @@ import constant
 
 class Grid:
     def __init__(self, row: int, col: int):
-        self.row = row
+        self.row = row if row != 0 else row+10
         self.col = col
 
         if self.row < constant.MIN_ROW or self.row > constant.MAX_ROW:
