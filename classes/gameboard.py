@@ -40,6 +40,11 @@ class GameBoard:
         # Switch "turn"
         self.turn = self.turn.opponent
 
+    def getPossibleMoves(self, origin: Grid):
+        def isOutOfBound(grid: Grid):
+            return (grid.row < constant.MIN_ROW or grid.row > constant.MAX_ROW or
+                    grid.col < constant.MIN_COL or grid.col > constant.MAX_COL)
+
         customFn = {
             PieceType.SOLDIER: self.getSoldierMoves,
             PieceType.HORSE: self.getJumpyMoves,
@@ -52,8 +57,7 @@ class GameBoard:
 
         piece = self.board.get(origin.row, origin.col)
         # Invalidate when given grids are out of bound
-        if (origin.row < constant.MIN_ROW or origin.row > constant.MAX_ROW or
-            origin.col < constant.MIN_COL or origin.col > constant.MAX_COL):
+        if isOutOfBound(origin):
             return []
 
         # Invalidate when no piece is on "origin" grid
@@ -71,12 +75,9 @@ class GameBoard:
         return moves
 
     def getCastleMoves(self, origin: Grid, pieceType: PieceType):
-        # def isOutOfBound(grid: Grid):
-        #     return (origin.row < constant. or origin.row > constant.MAX_ROW or
-        #     origin.col < constant.MIN_COL or origin.col > constant.MAX_COL)
         # moves = [(i, j) for i in range(-1,2) for j in range(-1,2)]
         # moves.remove((0,0))
-        # moves = [(i, j) for (i, j) in moves if ]
+        # moves = [(i, j) for (i, j) in moves if]
         # return moves
         return []
 
