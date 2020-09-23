@@ -28,6 +28,7 @@ class GameBoard:
     def makeMove(self, origin: Grid, dest: Grid, pieceType: PieceType):
         # Validate the given move
         if not self.validateMove(origin, dest, pieceType):
+            print("The move cannot be made!")
             return
 
         # Make the move
@@ -35,10 +36,10 @@ class GameBoard:
         self.board.remove(origin.row, origin.col)
         self.board.put(dest.row, dest.col, piece)
 
-        # Check for "Janggun" or "Oitong"
-
         # Switch "turn"
         self.turn = self.turn.opponent
+
+        print(self.board)
 
     def getPossibleMoveSets(self, origin: Grid):
         def isOutOfBound(grid: Grid):
