@@ -33,6 +33,11 @@ class MoveSet:
                 return False
 
             piece = board.get(row, col)
+            # Cannon cannot ever pass cannon
+            if (piece and piece.pieceType == PieceType.CANNON and 
+                originPiece.pieceType == PieceType.CANNON):
+                return False
+                
             if i == len(self.moves)-1:
                 # Invalidate if some hurdles are left
                 if numHurdles > 0:
@@ -41,11 +46,6 @@ class MoveSet:
                 return not piece or piece.camp != player
             
             if piece:
-                # Cannon cannot ever pass cannon
-                if (piece.pieceType == PieceType.CANNON and 
-                    originPiece.pieceType == PieceType.CANNON):
-                    return False
-
                 # Decrement number of hurdles left when passing a piece
                 numHurdles -= 1
                 if numHurdles < 0:
