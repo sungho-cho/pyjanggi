@@ -4,6 +4,7 @@ from camp import Camp
 from formation import Formation
 from piece import Piece, PieceType
 from grid import Grid
+from move import MoveSet
 
 class GameBoard:
 
@@ -26,8 +27,7 @@ class GameBoard:
 
     def makeMove(self, origin: Grid, dest: Grid, pieceType: PieceType):
         # Validate the given move
-        validated = self.validateMove(origin, dest, pieceType)
-        if not validated:
+        if not self.validateMove(origin, dest, pieceType):
             return
 
         # Make the move
@@ -40,19 +40,19 @@ class GameBoard:
         # Switch "turn"
         self.turn = self.turn.opponent
 
-    def getPossibleMoves(self, origin: Grid):
+    def getPossibleMoveSets(self, origin: Grid):
         def isOutOfBound(grid: Grid):
             return (grid.row < constant.MIN_ROW or grid.row > constant.MAX_ROW or
                     grid.col < constant.MIN_COL or grid.col > constant.MAX_COL)
 
         customFn = {
-            PieceType.SOLDIER: self.getSoldierMoves,
-            PieceType.HORSE: self.getJumpyMoves,
-            PieceType.ELEPHANT: self.getJumpyMoves,
-            PieceType.CHARIOT: self.getStraightMoves,
-            PieceType.CANNON: self.getStraightMoves,
-            PieceType.GENERAL: self.getCastleMoves,
-            PieceType.GUARD: self.getCastleMoves,
+            PieceType.SOLDIER: self.getSoldierMoveSets,
+            PieceType.HORSE: self.getJumpyMoveSets,
+            PieceType.ELEPHANT: self.getJumpyMoveSets,
+            PieceType.CHARIOT: self.getStraightMoveSets,
+            PieceType.CANNON: self.getStraightMoveSets,
+            PieceType.GENERAL: self.getCastleMoveSets,
+            PieceType.GUARD: self.getCastleMoveSets,
         }
 
         piece = self.board.get(origin.row, origin.col)
@@ -67,25 +67,50 @@ class GameBoard:
         if piece.camp != self.turn:
             return []
         
-        print(customFn[piece.pieceType](origin, piece.pieceType))
+        moveSets = customFn[piece.pieceType](origin, piece.pieceType)
+        moveSets = [ms for ms in moveSets if ms.validate(self.board, origin, self.turn)]
+        return moveSets
     
-    def getSoldierMoves(self, origin: Grid):
-        moves = [(0, -1), (0, 1)]
-        moves += [(-1, 0)] if self.player == self.turn else [(1, 0)]
-        return moves
+    def getSoldierMoveSets(self, origin: Grid, pieceType: PieceType):
+        steps = [(0, -1), (0, 1)]
+        steps += [(-1, 0)] if self.player == self.turn else [(1, 0)]
+        return [MoveSet([(dr,dc)], False) for (dr,dc) in steps]
 
-    def getCastleMoves(self, origin: Grid, pieceType: PieceType):
-        # moves = [(i, j) for i in range(-1,2) for j in range(-1,2)]
-        # moves.remove((0,0))
-        # moves = [(i, j) for (i, j) in moves if]
-        # return moves
-        return []
+    def getCastleMoveSets(self, origin: Grid, pieceType: PieceType):
+        def isOutOfBound(row: int, col: int):
+            return (col < 4 or col > 6 or
+                (self.turn == self.player and (row < 8 or row > 10)) and
+                (self.turn != self.player and (row < 1 or row > 3)))
+        steps = [(i, j) for i in range(-1,2) for j in range(-1,2)]
+        steps.remove((0,0))
+        steps = [(i, j) for (i, j) in steps
+                if not isOutOfBound(origin.row+i, origin.col+j)]
+        return [MoveSet([(dr,dc)], False) for (dr,dc) in steps]
 
-    def getJumpyMoves(self, origin: Grid, pieceType: PieceType):
-        return [3]
+    def getJumpyMoveSets(self, origin: Grid, pieceType: PieceType):
+        piece = self.board.get(origin.row, origin.col)
+        return piece.getJumpyMoveSets()
 
-    def getStraightMoves(self, origin: Grid, pieceType: PieceType):
-        return [2]
+    def getStraightMoveSets(self, origin: Grid, pieceType: PieceType):
+        def isOutOfBound(row: int, col: int):
+            return (row < constant.MIN_ROW or row > constant.MAX_ROW or
+                    col < constant.MIN_COL or col > constant.MAX_COL)
+
+        def getMoveSetsInDirection(origin: Grid, dr: int, dc: int):
+            (row, col) = (origin.row, origin.col)
+            steps = []
+            moveSets = []
+            while not isOutOfBound(row+dr, col+dc):
+                row += dr
+                col += dc
+                steps.append((dr,dc))
+                moveSets.append(MoveSet(steps.copy(), pieceType == PieceType.CANNON))
+            return moveSets
+
+        moveSets = []
+        for (dr,dc) in [(0,-1),(0,1),(-1,0),(1,0)]:
+            moveSets += getMoveSetsInDirection(origin, dr, dc)
+        return moveSets        
 
     def validateMove(self, origin: Grid, dest: Grid, pieceType: PieceType):
         def isOutOfBound(grid: Grid):
@@ -114,41 +139,11 @@ class GameBoard:
         if destPiece and destPiece.camp == originPiece.camp:
             return False
 
-        # Run custom validation for each piece type
-        customValidated = False
-        if pieceType == PieceType.HORSE or pieceType == PieceType.ELEPHANT:
-            customValidated = self.validateJumpyPieceMove(origin, dest)
-        elif pieceType == PieceType.GENERAL or pieceType == PieceType.GUARD:
-            customValidated = self.validateCastlePieceMove(origin, dest)
-        elif pieceType == PieceType.SOLDIER:
-            customValidated = self.validateSoldierPieceMove(origin, dest)
-        elif pieceType == PieceType.CHARIOT or pieceType == PieceType.CANNON:
-            customValidated = self.validateStraightPieceMove(origin, dest)
-        if not customValidated:
+        # See if dest is in list of all possible destinatins from origin
+        moveSets = self.getPossibleMoveSets(origin)
+        allDest = [ms.getDest(self.board, origin, self.turn) for ms in moveSets]
+        if dest not in allDest:
             return False
 
-        # Invalidate the move makes it enemy's "Janggun"
-        return True
-
-    def validateJumpyPieceMove(self, origin: Grid, dest: Grid):
-        piece = self.board.get(origin.row, origin.col)
-        jumpyMoves = piece.getJumpyMoves()
-        for moves in jumpyMoves:
-            validated = True
-            row = origin.row
-            col = origin.col
-            for move in moves:
-                row += move[0]
-                col += move[1]
-                if self.board.get(row, col):
-                    pass
-        return True
-
-    def validateCastlePieceMove(self, origin: Grid, dest: Grid):
-        return True
-
-    def validateSoldierPieceMove(self, origin: Grid, dest: Grid):
-        return True
-
-    def validateStraightPieceMove(self, origin: Grid, dest: Grid):
+        # TODO: Invalidate the move makes it enemy's "Janggun"
         return True
