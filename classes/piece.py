@@ -1,6 +1,4 @@
-from termcolor import colored
 from enum import Enum
-from camp import Camp
 
 class PieceType(Enum):
     GENERAL = 1
@@ -12,6 +10,9 @@ class PieceType(Enum):
     SOLDIER = 7
 
 
+from termcolor import colored
+from camp import Camp
+from move import MoveSet
 class Piece:
     def __init__(self, pieceType: PieceType):
         self.pieceType = pieceType
@@ -35,30 +36,27 @@ class Piece:
             printStr = colored(printStr, 'red')
         return printStr
 
-    def setCamp(self, camp: Camp):
-        self.camp = camp
-
-    def getJumpyMoves(self):
-        moves = []
+    def getJumpyMoveSets(self):
+        moveSets = []
 
         if self.pieceType == PieceType.HORSE:
-            moves.append([(0, 1), (-1, 1)])
-            moves.append([(0, 1), (1, 1)])
-            moves.append([(1, 0), (1, 1)])
-            moves.append([(1, 0), (1, -1)])
-            moves.append([(0, -1), (-1, -1)])
-            moves.append([(0, -1), (1, -1)])
-            moves.append([(-1, 0), (-1, 1)])
-            moves.append([(-1, 0), (-1, -1)])
+            moveSets.append(MoveSet([(0, 1), (-1, 1)], False))
+            moveSets.append(MoveSet([(0, 1), (1, 1)], False))
+            moveSets.append(MoveSet([(1, 0), (1, 1)], False))
+            moveSets.append(MoveSet([(1, 0), (1, -1)], False))
+            moveSets.append(MoveSet([(0, -1), (-1, -1)], False))
+            moveSets.append(MoveSet([(0, -1), (1, -1)], False))
+            moveSets.append(MoveSet([(-1, 0), (-1, 1)], False))
+            moveSets.append(MoveSet([(-1, 0), (-1, -1)], False))
 
         elif self.pieceType == PieceType.ELEPHANT:
-            moves.append([(0, 1), (-1, 1), (-1, 1)])
-            moves.append([(0, 1), (1, 1), (1, 1)])
-            moves.append([(1, 0), (1, 1), (1, 1)])
-            moves.append([(1, 0), (1, -1), (1, -1)])
-            moves.append([(0, -1), (-1, -1), (-1, -1)])
-            moves.append([(0, -1), (1, -1), (1, -1)])
-            moves.append([(-1, 0), (-1, 1), (-1, 1)])
-            moves.append([(-1, 0), (-1, -1), (-1, -1)])
+            moveSets.append(MoveSet([(0, 1), (-1, 1), (-1, 1)], False))
+            moveSets.append(MoveSet([(0, 1), (1, 1), (1, 1)], False))
+            moveSets.append(MoveSet([(1, 0), (1, 1), (1, 1)], False))
+            moveSets.append(MoveSet([(1, 0), (1, -1), (1, -1)], False))
+            moveSets.append(MoveSet([(0, -1), (-1, -1), (-1, -1)], False))
+            moveSets.append(MoveSet([(0, -1), (1, -1), (1, -1)], False))
+            moveSets.append(MoveSet([(-1, 0), (-1, 1), (-1, 1)], False))
+            moveSets.append(MoveSet([(-1, 0), (-1, -1), (-1, -1)], False))
 
-        return moves
+        return moveSets

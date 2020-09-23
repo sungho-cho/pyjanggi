@@ -56,4 +56,4 @@ class Board:
         for row in range(constant.MIN_ROW, constant.MAX_ROW+1):
             for col in range(constant.MIN_COL, constant.MAX_COL+1):
                 if self.__board[row][col]:
-                    self.__board[row][col].setCamp(camp)
+                    self.__board[row][col].camp = camp
