@@ -1,10 +1,11 @@
-import constant
-from grid import Grid
-from camp import Camp
-from piece import PieceType
+import classes.constant as constant
+from classes.grid import Grid
+from classes.camp import Camp
+from classes.piece import PieceType
+
 
 class MoveSet:
-    def __init__(self, moves: [(int,int)], isCannon: bool):
+    def __init__(self, moves: [(int, int)], isCannon: bool):
         self.moves = moves
         self.isCannon = isCannon
 
@@ -26,7 +27,7 @@ class MoveSet:
         numHurdles = 1 if self.isCannon else 0
         row, col = (origin.row, origin.col)
         for i in range(len(self.moves)):
-            (dr,dc) = self.moves[i]
+            (dr, dc) = self.moves[i]
             row += dr
             col += dc
             if isOutOfBound(row, col):
@@ -34,17 +35,17 @@ class MoveSet:
 
             piece = board.get(row, col)
             # Cannon cannot ever pass cannon
-            if (piece and piece.pieceType == PieceType.CANNON and 
-                originPiece.pieceType == PieceType.CANNON):
+            if (piece and piece.pieceType == PieceType.CANNON and
+                    originPiece.pieceType == PieceType.CANNON):
                 return False
-                
+
             if i == len(self.moves)-1:
                 # Invalidate if some hurdles are left
                 if numHurdles > 0:
                     return False
                 # Invalidate if landing on an ally piece
                 return not piece or piece.camp != player
-            
+
             if piece:
                 # Decrement number of hurdles left when passing a piece
                 numHurdles -= 1

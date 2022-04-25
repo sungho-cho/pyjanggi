@@ -1,10 +1,11 @@
-import constant
-from board import Board
-from camp import Camp
-from formation import Formation
-from piece import Piece, PieceType
-from grid import Grid
-from move import MoveSet
+import classes.constant as constant
+from classes.board import Board
+from classes.camp import Camp
+from classes.formation import Formation
+from classes.piece import Piece, PieceType
+from classes.grid import Grid
+from classes.move import MoveSet
+
 
 class GameBoard:
 
@@ -64,29 +65,30 @@ class GameBoard:
         # Invalidate when no piece is on "origin" grid
         if not piece:
             return []
-        
+
         if piece.camp != self.turn:
             return []
-        
+
         moveSets = customFn[piece.pieceType](origin, piece.pieceType)
-        moveSets = [ms for ms in moveSets if ms.validate(self.board, origin, self.turn)]
+        moveSets = [ms for ms in moveSets if ms.validate(
+            self.board, origin, self.turn)]
         return moveSets
-    
+
     def getSoldierMoveSets(self, origin: Grid, pieceType: PieceType):
         steps = [(0, -1), (0, 1)]
         steps += [(-1, 0)] if self.player == self.turn else [(1, 0)]
-        return [MoveSet([(dr,dc)], False) for (dr,dc) in steps]
+        return [MoveSet([(dr, dc)], False) for (dr, dc) in steps]
 
     def getCastleMoveSets(self, origin: Grid, pieceType: PieceType):
         def isOutOfBound(row: int, col: int):
             return (col < 4 or col > 6 or
-                (self.turn == self.player and (row < 8 or row > 10)) and
-                (self.turn != self.player and (row < 1 or row > 3)))
-        steps = [(i, j) for i in range(-1,2) for j in range(-1,2)]
-        steps.remove((0,0))
+                    (self.turn == self.player and (row < 8 or row > 10)) and
+                    (self.turn != self.player and (row < 1 or row > 3)))
+        steps = [(i, j) for i in range(-1, 2) for j in range(-1, 2)]
+        steps.remove((0, 0))
         steps = [(i, j) for (i, j) in steps
-                if not isOutOfBound(origin.row+i, origin.col+j)]
-        return [MoveSet([(dr,dc)], False) for (dr,dc) in steps]
+                 if not isOutOfBound(origin.row+i, origin.col+j)]
+        return [MoveSet([(dr, dc)], False) for (dr, dc) in steps]
 
     def getJumpyMoveSets(self, origin: Grid, pieceType: PieceType):
         piece = self.board.get(origin.row, origin.col)
@@ -104,14 +106,15 @@ class GameBoard:
             while not isOutOfBound(row+dr, col+dc):
                 row += dr
                 col += dc
-                steps.append((dr,dc))
-                moveSets.append(MoveSet(steps.copy(), pieceType == PieceType.CANNON))
+                steps.append((dr, dc))
+                moveSets.append(
+                    MoveSet(steps.copy(), pieceType == PieceType.CANNON))
             return moveSets
 
         moveSets = []
-        for (dr,dc) in [(0,-1),(0,1),(-1,0),(1,0)]:
+        for (dr, dc) in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
             moveSets += getMoveSetsInDirection(origin, dr, dc)
-        return moveSets        
+        return moveSets
 
     def validateMove(self, origin: Grid, dest: Grid, pieceType: PieceType):
         def isOutOfBound(grid: Grid):
@@ -123,7 +126,7 @@ class GameBoard:
         # Invalidate when given grids are out of bound
         if isOutOfBound(origin) or isOutOfBound(dest):
             return False
-        
+
         # Invalidate when no piece is on "origin" grid
         if not originPiece:
             return False
@@ -142,7 +145,8 @@ class GameBoard:
 
         # See if dest is in list of all possible destinatins from origin
         moveSets = self.getPossibleMoveSets(origin)
-        allDest = [ms.getDest(self.board, origin, self.turn) for ms in moveSets]
+        allDest = [ms.getDest(self.board, origin, self.turn)
+                   for ms in moveSets]
         if dest not in allDest:
             return False
 

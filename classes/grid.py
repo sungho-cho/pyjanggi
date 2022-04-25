@@ -1,4 +1,5 @@
-import constant
+import classes.constant as constant
+
 
 class Grid:
     def __init__(self, row: int, col: int):
@@ -13,4 +14,3 @@ class Grid:
 
     def __eq__(self, other):
         return self.row == other.row and self.col == other.col
-

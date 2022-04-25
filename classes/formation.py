@@ -1,6 +1,8 @@
 from enum import IntEnum
-from board import Board
-from piece import PieceType, Piece
+
+from classes.board import Board
+from classes.piece import PieceType, Piece
+
 
 class Formation(IntEnum):
     YANGGWIMA = 1

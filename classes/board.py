@@ -1,13 +1,15 @@
-import constant
-from piece import Piece
-from camp import Camp
+import classes.constant as constant
+from classes.piece import Piece
+from classes.camp import Camp
+
 
 class Board:
     def __init__(self):
         self.numRows = constant.MAX_ROW-constant.MIN_ROW+1
         self.numCols = constant.MAX_COL-constant.MIN_COL+1
-        self.__board = [[None for i in range(self.numCols+1)] 
+        self.__board = [[None for i in range(self.numCols+1)]
                         for j in range(self.numRows+1)]
+
     def __str__(self):
         printStr = ""
         for row in range(constant.MAX_ROW+1):
@@ -27,7 +29,6 @@ class Board:
             printStr += "\n"
         return printStr
 
-
     def put(self, row: int, col: int, piece: Piece):
         self.__board[row][col] = piece
 
@@ -39,17 +40,18 @@ class Board:
 
     def get(self, row: int, col: int):
         return self.__board[row][col]
-    
+
     def remove(self, row: int, col: int):
         self.__board[row][col] = None
 
     def rotate(self):
-        newBoard = [[None for i in range(self.numCols+1)] 
-                        for j in range(self.numRows+1)]
+        newBoard = [[None for i in range(self.numCols+1)]
+                    for j in range(self.numRows+1)]
         for row in range(constant.MIN_ROW, constant.MAX_ROW+1):
             for col in range(constant.MIN_COL, constant.MAX_COL+1):
                 if self.__board[row][col]:
-                    newBoard[self.numRows-row+1][self.numCols-col+1] = self.__board[row][col]
+                    newBoard[self.numRows-row+1][self.numCols -
+                                                 col+1] = self.__board[row][col]
         self.__board = newBoard
 
     def markCamp(self, camp: Camp):
