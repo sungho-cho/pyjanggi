@@ -23,12 +23,12 @@ class GameBoard:
         else:
             choBoard.rotate()
 
-        self.board.putAll(choBoard)
-        self.board.putAll(hanBoard)
+        self.board.merge(choBoard)
+        self.board.merge(hanBoard)
 
     def makeMove(self, origin: Grid, dest: Grid, pieceType: PieceType):
         # Validate the given move
-        if not self.validateMove(origin, dest, pieceType):
+        if not self._validateMove(origin, dest, pieceType):
             print("The move cannot be made!")
             return
 
@@ -48,13 +48,13 @@ class GameBoard:
                     grid.col < constant.MIN_COL or grid.col > constant.MAX_COL)
 
         customFn = {
-            PieceType.SOLDIER: self.getSoldierMoveSets,
-            PieceType.HORSE: self.getJumpyMoveSets,
-            PieceType.ELEPHANT: self.getJumpyMoveSets,
-            PieceType.CHARIOT: self.getStraightMoveSets,
-            PieceType.CANNON: self.getStraightMoveSets,
-            PieceType.GENERAL: self.getCastleMoveSets,
-            PieceType.GUARD: self.getCastleMoveSets,
+            PieceType.SOLDIER: self._getSoldierMoveSets,
+            PieceType.HORSE: self._getJumpyMoveSets,
+            PieceType.ELEPHANT: self._getJumpyMoveSets,
+            PieceType.CHARIOT: self._getStraightMoveSets,
+            PieceType.CANNON: self._getStraightMoveSets,
+            PieceType.GENERAL: self._getCastleMoveSets,
+            PieceType.GUARD: self._getCastleMoveSets,
         }
 
         piece = self.board.get(origin.row, origin.col)
@@ -74,12 +74,12 @@ class GameBoard:
             self.board, origin, self.turn)]
         return moveSets
 
-    def getSoldierMoveSets(self, origin: Grid, pieceType: PieceType):
+    def _getSoldierMoveSets(self, origin: Grid, pieceType: PieceType):
         steps = [(0, -1), (0, 1)]
         steps += [(-1, 0)] if self.player == self.turn else [(1, 0)]
         return [MoveSet([(dr, dc)], False) for (dr, dc) in steps]
 
-    def getCastleMoveSets(self, origin: Grid, pieceType: PieceType):
+    def _getCastleMoveSets(self, origin: Grid, pieceType: PieceType):
         def isOutOfBound(row: int, col: int):
             return (col < 4 or col > 6 or
                     (self.turn == self.player and (row < 8 or row > 10)) and
@@ -90,20 +90,20 @@ class GameBoard:
                  if not isOutOfBound(origin.row+i, origin.col+j)]
         return [MoveSet([(dr, dc)], False) for (dr, dc) in steps]
 
-    def getJumpyMoveSets(self, origin: Grid, pieceType: PieceType):
+    def _getJumpyMoveSets(self, origin: Grid, pieceType: PieceType):
         piece = self.board.get(origin.row, origin.col)
         return piece.getJumpyMoveSets()
 
-    def getStraightMoveSets(self, origin: Grid, pieceType: PieceType):
-        def isOutOfBound(row: int, col: int):
+    def _getStraightMoveSets(self, origin: Grid, pieceType: PieceType):
+        def _isOutOfBound(row: int, col: int):
             return (row < constant.MIN_ROW or row > constant.MAX_ROW or
                     col < constant.MIN_COL or col > constant.MAX_COL)
 
-        def getMoveSetsInDirection(origin: Grid, dr: int, dc: int):
+        def _getMoveSetsInDirection(origin: Grid, dr: int, dc: int):
             (row, col) = (origin.row, origin.col)
             steps = []
             moveSets = []
-            while not isOutOfBound(row+dr, col+dc):
+            while not _isOutOfBound(row+dr, col+dc):
                 row += dr
                 col += dc
                 steps.append((dr, dc))
@@ -113,18 +113,18 @@ class GameBoard:
 
         moveSets = []
         for (dr, dc) in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
-            moveSets += getMoveSetsInDirection(origin, dr, dc)
+            moveSets += _getMoveSetsInDirection(origin, dr, dc)
         return moveSets
 
-    def validateMove(self, origin: Grid, dest: Grid, pieceType: PieceType):
-        def isOutOfBound(grid: Grid):
+    def _validateMove(self, origin: Grid, dest: Grid, pieceType: PieceType):
+        def _isOutOfBound(grid: Grid):
             return (grid.row < constant.MIN_ROW or grid.row > constant.MAX_ROW or
                     grid.col < constant.MIN_COL or grid.col > constant.MAX_COL)
 
         originPiece = self.board.get(origin.row, origin.col)
         destPiece = self.board.get(dest.row, dest.col)
         # Invalidate when given grids are out of bound
-        if isOutOfBound(origin) or isOutOfBound(dest):
+        if _isOutOfBound(origin) or _isOutOfBound(dest):
             return False
 
         # Invalidate when no piece is on "origin" grid

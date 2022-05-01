@@ -22,13 +22,11 @@ class Piece:
 
     def _pieceToStr(self):
         pieceDict = {
-            # PieceType.GENERAL: "王",
             PieceType.GUARD: "士",
             PieceType.HORSE: "馬",
             PieceType.ELEPHANT: "象",
             PieceType.CHARIOT: "車",
             PieceType.CANNON: "包",
-            # PieceType.SOLDIER: "卒",
         }
 
         if self.pieceType in pieceDict:
