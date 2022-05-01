@@ -7,7 +7,7 @@ from classes.grid import Grid
 from classes.move import MoveSet
 
 
-class GameBoard:
+class JanggiGame:
 
     def __init__(self, player: Camp, choFormation: Formation, hanFormation: Formation):
         self.board = Board()
