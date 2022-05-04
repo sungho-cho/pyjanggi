@@ -20,10 +20,15 @@ class JanggiGame:
             print("The move cannot be made!")
             return
 
+        # Detenmine if game's over
+        gameOver = False
+        destPiece = self.board.get(dest.row, dest.col)
+        if destPiece and destPiece.pieceType == PieceType.GENERAL:
+            gameOver = True
+
         # Make the move
         piece = self.board.get(origin.row, origin.col)
         self.board.remove(origin.row, origin.col)
-        self.board.get
         self.board.put(dest.row, dest.col, piece)
 
         # Update Cho and Han's scores
@@ -33,6 +38,8 @@ class JanggiGame:
         self.turn = self.turn.opponent
 
         print(self.board)
+
+        return gameOver
 
     def getAllDestinations(self, origin: Grid):
         moveSets = self._getPossibleMoveSets(origin)
