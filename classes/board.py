@@ -29,6 +29,7 @@ class Board:
             printStr += "\n"
         return printStr
 
+    # Used row,col as inputs instead of Grid to make it easier to generate boards in formation.py
     def put(self, row: int, col: int, piece: Piece):
         self.__board[row][col] = piece
 
@@ -59,3 +60,11 @@ class Board:
             for col in range(constant.MIN_COL, constant.MAX_COL+1):
                 if self.__board[row][col]:
                     self.__board[row][col].camp = camp
+
+    def getScore(self, camp: Camp):
+        score = 0
+        for row in range(constant.MIN_ROW, constant.MAX_ROW+1):
+            for col in range(constant.MIN_COL, constant.MAX_COL+1):
+                if self.__board[row][col] and self.__board[row][col].camp == camp:
+                    score += self.__board[row][col].value
+        return score

@@ -12,5 +12,8 @@ class Grid:
         if self.col < constant.MIN_COL or self.col > constant.MAX_COL:
             raise Exception(f"Grid column is out of range: {self.col}")
 
+    def __iter__(self):
+        yield self.row, self.col
+
     def __eq__(self, other):
         return self.row == other.row and self.col == other.col

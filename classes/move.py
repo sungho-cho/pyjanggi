@@ -5,9 +5,8 @@ from classes.piece import PieceType
 
 
 class MoveSet:
-    def __init__(self, moves: [(int, int)], isCannon: bool):
+    def __init__(self, moves: [(int, int)]):
         self.moves = moves
-        self.isCannon = isCannon
 
     def getDest(self, board, origin: Grid, player: Camp):
         if self.validate(board, origin, player):
@@ -24,7 +23,7 @@ class MoveSet:
             return (row < constant.MIN_ROW or row > constant.MAX_ROW or
                     col < constant.MIN_COL or col > constant.MAX_COL)
         originPiece = board.get(origin.row, origin.col)
-        numHurdles = 1 if self.isCannon else 0
+        numHurdles = 1 if originPiece.pieceType == PieceType.CANNON else 0
         row, col = (origin.row, origin.col)
         for i in range(len(self.moves)):
             (dr, dc) = self.moves[i]

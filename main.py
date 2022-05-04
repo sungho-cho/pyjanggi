@@ -9,4 +9,5 @@ if __name__ == '__main__':
     choFormation = Formation(random.randint(1, 4))
     hanFormation = Formation(random.randint(1, 4))
     game = JanggiGame(camp, choFormation, hanFormation)
+    print(f"CHO: {game.choScore} / HAN: {game.hanScore}")
     print(game.board)
