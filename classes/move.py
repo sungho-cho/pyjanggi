@@ -1,4 +1,4 @@
-import classes.constant as constant
+from . import constant
 from .grid import Grid
 from .camp import Camp
 from .piece import PieceType
@@ -9,7 +9,7 @@ class MoveSet:
         self.moves = moves
 
     def getDest(self, board, origin: Grid, player: Camp):
-        if self.validate(board, origin, player):
+        if self.isValid(board, origin, player):
             row, col = (origin.row, origin.col)
             for dr, dc in self.moves:
                 row += dr
@@ -18,7 +18,7 @@ class MoveSet:
         else:
             return None
 
-    def validate(self, board, origin: Grid, player: Camp):
+    def isValid(self, board, origin: Grid, player: Camp):
         def isOutOfBound(row: int, col: int):
             return (row < constant.MIN_ROW or row > constant.MAX_ROW or
                     col < constant.MIN_COL or col > constant.MAX_COL)

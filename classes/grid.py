@@ -1,4 +1,4 @@
-import classes.constant as constant
+from . import constant
 
 
 class Grid:

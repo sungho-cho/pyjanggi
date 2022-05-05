@@ -1,4 +1,4 @@
-import classes.constant as constant
+from . import constant
 from .piece import Piece
 from .camp import Camp
 
