@@ -1,6 +1,6 @@
 import classes.constant as constant
-from classes.piece import Piece
-from classes.camp import Camp
+from .piece import Piece
+from .camp import Camp
 
 
 class Board:

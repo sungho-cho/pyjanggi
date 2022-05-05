@@ -1,7 +1,7 @@
 from enum import Enum
 from termcolor import colored
 
-from classes.camp import Camp
+from .camp import Camp
 
 
 class PieceType(Enum):

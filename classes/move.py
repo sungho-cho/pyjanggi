@@ -1,7 +1,7 @@
 import classes.constant as constant
-from classes.grid import Grid
-from classes.camp import Camp
-from classes.piece import PieceType
+from .grid import Grid
+from .camp import Camp
+from .piece import PieceType
 
 
 class MoveSet:

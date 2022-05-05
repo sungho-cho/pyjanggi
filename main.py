@@ -1,6 +1,6 @@
 import random
 
-from classes.janggi_game import JanggiGame
+from janggi_game import JanggiGame
 from classes.camp import Camp
 from classes.formation import Formation
 

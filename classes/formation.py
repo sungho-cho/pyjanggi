@@ -1,7 +1,7 @@
 from enum import IntEnum
 
-from classes.board import Board
-from classes.piece import PieceType, Piece
+from .board import Board
+from .piece import PieceType, Piece
 
 
 class Formation(IntEnum):
