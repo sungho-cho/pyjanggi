@@ -151,7 +151,29 @@ class JanggiGame:
 
     def _getJumpyMoveSets(self, origin: Grid, pieceType: PieceType):
         piece = self.board.get(origin.row, origin.col)
-        return piece.getJumpyMoveSets()
+        moveSets = []
+
+        if piece.pieceType == PieceType.HORSE:
+            moveSets.append(MoveSet([(0, 1), (-1, 1)]))
+            moveSets.append(MoveSet([(0, 1), (1, 1)]))
+            moveSets.append(MoveSet([(1, 0), (1, 1)]))
+            moveSets.append(MoveSet([(1, 0), (1, -1)]))
+            moveSets.append(MoveSet([(0, -1), (-1, -1)]))
+            moveSets.append(MoveSet([(0, -1), (1, -1)]))
+            moveSets.append(MoveSet([(-1, 0), (-1, 1)]))
+            moveSets.append(MoveSet([(-1, 0), (-1, -1)]))
+
+        elif piece.pieceType == PieceType.ELEPHANT:
+            moveSets.append(MoveSet([(0, 1), (-1, 1), (-1, 1)]))
+            moveSets.append(MoveSet([(0, 1), (1, 1), (1, 1)]))
+            moveSets.append(MoveSet([(1, 0), (1, 1), (1, 1)]))
+            moveSets.append(MoveSet([(1, 0), (1, -1), (1, -1)]))
+            moveSets.append(MoveSet([(0, -1), (-1, -1), (-1, -1)]))
+            moveSets.append(MoveSet([(0, -1), (1, -1), (1, -1)]))
+            moveSets.append(MoveSet([(-1, 0), (-1, 1), (-1, 1)]))
+            moveSets.append(MoveSet([(-1, 0), (-1, -1), (-1, -1)]))
+
+        return moveSets
 
     def _getStraightMoveSets(self, origin: Grid, pieceType: PieceType):
         def _isOutOfBound(row: int, col: int):

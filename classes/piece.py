@@ -73,28 +73,3 @@ class Piece:
         elif self.camp == Camp.HAN:
             printStr = colored(printStr, 'red')
         return printStr
-
-    def getJumpyMoveSets(self):
-        moveSets = []
-
-        if self.pieceType == PieceType.HORSE:
-            moveSets.append(MoveSet([(0, 1), (-1, 1)]))
-            moveSets.append(MoveSet([(0, 1), (1, 1)]))
-            moveSets.append(MoveSet([(1, 0), (1, 1)]))
-            moveSets.append(MoveSet([(1, 0), (1, -1)]))
-            moveSets.append(MoveSet([(0, -1), (-1, -1)]))
-            moveSets.append(MoveSet([(0, -1), (1, -1)]))
-            moveSets.append(MoveSet([(-1, 0), (-1, 1)]))
-            moveSets.append(MoveSet([(-1, 0), (-1, -1)]))
-
-        elif self.pieceType == PieceType.ELEPHANT:
-            moveSets.append(MoveSet([(0, 1), (-1, 1), (-1, 1)]))
-            moveSets.append(MoveSet([(0, 1), (1, 1), (1, 1)]))
-            moveSets.append(MoveSet([(1, 0), (1, 1), (1, 1)]))
-            moveSets.append(MoveSet([(1, 0), (1, -1), (1, -1)]))
-            moveSets.append(MoveSet([(0, -1), (-1, -1), (-1, -1)]))
-            moveSets.append(MoveSet([(0, -1), (1, -1), (1, -1)]))
-            moveSets.append(MoveSet([(-1, 0), (-1, 1), (-1, 1)]))
-            moveSets.append(MoveSet([(-1, 0), (-1, -1), (-1, -1)]))
-
-        return moveSets
