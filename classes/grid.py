@@ -13,7 +13,8 @@ class Grid:
             raise Exception(f"Grid column is out of range: {self.col}")
 
     def __iter__(self):
-        yield self.row, self.col
+        yield self.row
+        yield self.col
 
     def __eq__(self, other):
         return self.row == other.row and self.col == other.col
