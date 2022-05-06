@@ -83,7 +83,7 @@ class JanggiGame:
         if piece.camp != self.turn:
             return []
 
-        # Get MoveSets depending on piece type
+        # Get MoveSets based on piece type
         if piece.pieceType == PieceType.SOLDIER:
             moveSets = piece.getSoldierMoveSets(self.player == self.turn)
         elif piece.pieceType == PieceType.HORSE or piece.pieceType == PieceType.ELEPHANT:
