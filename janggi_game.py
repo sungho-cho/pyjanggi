@@ -11,6 +11,7 @@ class JanggiGame:
     def __init__(self, player: Camp, cho_formation: Formation, han_formation: Formation):
         self.player = player
         self.turn = Camp.CHO
+        self.cho_score = self.han_score = 0.0
         self._initialize_board(cho_formation, han_formation)
 
     def make_move(self, origin: Grid, dest: Grid, piece_type: PieceType):
