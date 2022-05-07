@@ -11,6 +11,7 @@ class JanggiGame:
     def __init__(self, player: Camp, cho_formation: Formation, han_formation: Formation):
         self.player = player
         self.turn = Camp.CHO
+        self.cho_score = self.han_score = 0.0
         self._initialize_board(cho_formation, han_formation)
 
     def make_move(self, origin: Grid, dest: Grid, piece_type: PieceType):
@@ -126,8 +127,7 @@ class JanggiGame:
             return False
 
         # See if destination is in list of all possible destinatins from origin
-        all_dest = self.getAllDestinations(origin)
-        if dest not in all_dest:
+        if dest not in self.get_all_destinations(origin):
             return False
 
         # TODO: Invalidate the move makes it enemy's "Janggun"
