@@ -1,7 +1,7 @@
 from enum import Enum
 from termcolor import colored
 
-from . import constant
+from . import constants
 from .camp import Camp
 from .grid import Grid
 
@@ -19,22 +19,23 @@ class PieceType(Enum):
 class Piece:
     from .move import MoveSet
 
-    def __init__(self, pieceType: PieceType):
-        self.pieceType = pieceType
+    def __init__(self, piece_type: PieceType):
+        self.piece_type = piece_type
         self.camp = None
 
     def __int__(self):
         if not self.camp:
-            raise Exception(f"{self.pieceType} does not have a camp assigned.")
+            raise Exception(
+                f"{self.piece_type} does not have a camp assigned.")
 
         if self.camp == Camp.HAN:
-            return self.pieceType.value * -1
+            return self.piece_type.value * -1
         else:
-            return self.pieceType.value
+            return self.piece_type.value
 
     @property
     def value(self):
-        valueDict = {
+        value_dict = {
             PieceType.GUARD: 3,
             PieceType.HORSE: 5,
             PieceType.ELEPHANT: 3,
@@ -43,10 +44,10 @@ class Piece:
             PieceType.SOLDIER: 2,
             PieceType.GENERAL: 0,
         }
-        return valueDict[self.pieceType]
+        return value_dict[self.piece_type]
 
-    def _pieceToStr(self):
-        pieceDict = {
+    def _piece_to_str(self):
+        piece_dict = {
             PieceType.GUARD: "士",
             PieceType.HORSE: "馬",
             PieceType.ELEPHANT: "象",
@@ -54,84 +55,84 @@ class Piece:
             PieceType.CANNON: "包",
         }
 
-        if self.pieceType in pieceDict:
-            return pieceDict[self.pieceType]
+        if self.piece_type in piece_dict:
+            return piece_dict[self.piece_type]
         else:
-            if self.pieceType == PieceType.GENERAL:
+            if self.piece_type == PieceType.GENERAL:
                 if self.camp == Camp.CHO:
                     return "楚"
                 else:
                     return "漢"
-            elif self.pieceType == PieceType.SOLDIER:
+            elif self.piece_type == PieceType.SOLDIER:
                 if self.camp == Camp.CHO:
                     return "卒"
                 else:
                     return "兵"
 
     def __str__(self):
-        printStr = self._pieceToStr()
+        print_str = self._piece_to_str()
         if self.camp == Camp.CHO:
-            printStr = colored(printStr, 'green')
+            print_str = colored(print_str, 'green')
         elif self.camp == Camp.HAN:
-            printStr = colored(printStr, 'red')
-        return printStr
+            print_str = colored(print_str, 'red')
+        return print_str
 
-    def getSoldierMoveSets(self, isPlayer: bool):
+    def get_soldier_move_sets(self, is_player: bool):
         steps = [(0, -1), (0, 1)]
-        steps += [(-1, 0)] if isPlayer else [(1, 0)]
+        steps += [(-1, 0)] if is_player else [(1, 0)]
         return [MoveSet([(dr, dc)]) for (dr, dc) in steps]
 
-    def getCastleMoveSets(self, origin: Grid, isPlayer: bool):
-        def isOutOfBound(row: int, col: int):
+    def get_castle_move_sets(self, origin: Grid, is_player: bool):
+        def is_out_of_bound(row: int, col: int):
             return (col < 4 or col > 6 or
-                    (isPlayer and (row < 8 or row > 10)) and
-                    (isPlayer and (row < 1 or row > 3)))
+                    (is_player and (row < 8 or row > 10)) and
+                    (is_player and (row < 1 or row > 3)))
         steps = [(i, j) for i in range(-1, 2) for j in range(-1, 2)]
         steps.remove((0, 0))
         steps = [(i, j) for (i, j) in steps
-                 if not isOutOfBound(origin.row+i, origin.col+j)]
+                 if not is_out_of_bound(origin.row+i, origin.col+j)]
         return [MoveSet([(dr, dc)]) for (dr, dc) in steps]
 
-    def getJumpyMoveSets(self):
-        moveSets = []
-        if self.pieceType == PieceType.HORSE:
-            moveSets.append(MoveSet([(0, 1), (-1, 1)]))
-            moveSets.append(MoveSet([(0, 1), (1, 1)]))
-            moveSets.append(MoveSet([(1, 0), (1, 1)]))
-            moveSets.append(MoveSet([(1, 0), (1, -1)]))
-            moveSets.append(MoveSet([(0, -1), (-1, -1)]))
-            moveSets.append(MoveSet([(0, -1), (1, -1)]))
-            moveSets.append(MoveSet([(-1, 0), (-1, 1)]))
-            moveSets.append(MoveSet([(-1, 0), (-1, -1)]))
-        elif self.pieceType == PieceType.ELEPHANT:
-            moveSets.append(MoveSet([(0, 1), (-1, 1), (-1, 1)]))
-            moveSets.append(MoveSet([(0, 1), (1, 1), (1, 1)]))
-            moveSets.append(MoveSet([(1, 0), (1, 1), (1, 1)]))
-            moveSets.append(MoveSet([(1, 0), (1, -1), (1, -1)]))
-            moveSets.append(MoveSet([(0, -1), (-1, -1), (-1, -1)]))
-            moveSets.append(MoveSet([(0, -1), (1, -1), (1, -1)]))
-            moveSets.append(MoveSet([(-1, 0), (-1, 1), (-1, 1)]))
-            moveSets.append(MoveSet([(-1, 0), (-1, -1), (-1, -1)]))
-        return moveSets
+    def get_jumpy_move_sets(self):
+        move_sets = []
+        if self.piece_type == PieceType.HORSE:
+            move_sets.append(MoveSet([(0, 1), (-1, 1)]))
+            move_sets.append(MoveSet([(0, 1), (1, 1)]))
+            move_sets.append(MoveSet([(1, 0), (1, 1)]))
+            move_sets.append(MoveSet([(1, 0), (1, -1)]))
+            move_sets.append(MoveSet([(0, -1), (-1, -1)]))
+            move_sets.append(MoveSet([(0, -1), (1, -1)]))
+            move_sets.append(MoveSet([(-1, 0), (-1, 1)]))
+            move_sets.append(MoveSet([(-1, 0), (-1, -1)]))
+        elif self.piece_type == PieceType.ELEPHANT:
+            move_sets.append(MoveSet([(0, 1), (-1, 1), (-1, 1)]))
+            move_sets.append(MoveSet([(0, 1), (1, 1), (1, 1)]))
+            move_sets.append(MoveSet([(1, 0), (1, 1), (1, 1)]))
+            move_sets.append(MoveSet([(1, 0), (1, -1), (1, -1)]))
+            move_sets.append(MoveSet([(0, -1), (-1, -1), (-1, -1)]))
+            move_sets.append(MoveSet([(0, -1), (1, -1), (1, -1)]))
+            move_sets.append(MoveSet([(-1, 0), (-1, 1), (-1, 1)]))
+            move_sets.append(MoveSet([(-1, 0), (-1, -1), (-1, -1)]))
+        return move_sets
 
-    def getStraightMoveSets(self, origin: Grid, pieceType: PieceType):
-        def _isOutOfBound(row: int, col: int):
-            return (row < constant.MIN_ROW or row > constant.MAX_ROW or
-                    col < constant.MIN_COL or col > constant.MAX_COL)
+    def get_straight_move_sets(self, origin: Grid, piece_type: PieceType):
+        def _is_out_of_bound(row: int, col: int):
+            return (row < constants.MIN_ROW or row > constants.MAX_ROW or
+                    col < constants.MIN_COL or col > constants.MAX_COL)
 
-        def _getMoveSetsInDirection(origin: Grid, dr: int, dc: int):
+        def _get_move_sets_in_direction(origin: Grid, dr: int, dc: int):
             (row, col) = (origin.row, origin.col)
             steps = []
-            moveSets = []
-            while not _isOutOfBound(row+dr, col+dc):
+            move_sets = []
+            while not _is_out_of_bound(row+dr, col+dc):
                 row += dr
                 col += dc
                 steps.append((dr, dc))
-                moveSets.append(
-                    MoveSet(steps.copy(), pieceType == PieceType.CANNON))
-            return moveSets
+                move_sets.append(
+                    MoveSet(steps.copy(), piece_type == PieceType.CANNON))
+            return move_sets
 
-        moveSets = []
+        move_sets = []
         for (dr, dc) in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
-            moveSets += _getMoveSetsInDirection(origin, dr, dc)
-        return moveSets
+            move_sets += _get_move_sets_in_direction(origin, dr, dc)
+        return move_sets

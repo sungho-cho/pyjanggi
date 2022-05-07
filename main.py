@@ -6,8 +6,8 @@ from classes.formation import Formation
 
 if __name__ == '__main__':
     camp = Camp(random.randint(0, 1))
-    choFormation = Formation(random.randint(1, 4))
-    hanFormation = Formation(random.randint(1, 4))
-    game = JanggiGame(camp, choFormation, hanFormation)
-    print(f"CHO: {game.choScore} / HAN: {game.hanScore}")
+    cho_formation = Formation(random.randint(1, 4))
+    han_formation = Formation(random.randint(1, 4))
+    game = JanggiGame(camp, cho_formation, han_formation)
+    print(f"cho: {game.cho_score} / han: {game.han_score}")
     print(game.board)

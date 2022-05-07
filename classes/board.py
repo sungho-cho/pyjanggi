@@ -1,41 +1,41 @@
-from . import constant
+from . import constants
 from .piece import Piece
 from .camp import Camp
 
 
 class Board:
     def __init__(self):
-        self.numRows = constant.MAX_ROW-constant.MIN_ROW+1
-        self.numCols = constant.MAX_COL-constant.MIN_COL+1
-        self.__board = [[None for i in range(self.numCols+1)]
-                        for j in range(self.numRows+1)]
+        self.num_rows = constants.MAX_ROW-constants.MIN_ROW+1
+        self.num_cols = constants.MAX_COL-constants.MIN_COL+1
+        self.__board = [[None for i in range(self.num_cols+1)]
+                        for j in range(self.num_rows+1)]
 
     def __str__(self):
-        printStr = ""
-        for row in range(constant.MAX_ROW+1):
-            for col in range(constant.MAX_COL+1):
+        print_str = ""
+        for row in range(constants.MAX_ROW+1):
+            for col in range(constants.MAX_COL+1):
                 if row == 0 and col > 0:
-                    printStr += " " + str(col)
+                    print_str += " " + str(col)
                 elif row > 0 and col == 0:
-                    printStr += " " + str(row % 10)
+                    print_str += " " + str(row % 10)
                 elif row > 0 and col > 0:
                     if self.__board[row][col]:
-                        printStr += str(self.__board[row][col])
+                        print_str += str(self.__board[row][col])
                     else:
-                        printStr += "  "
+                        print_str += "  "
                 else:
-                    printStr += " "
-                printStr += " "
-            printStr += "\n"
-        return printStr
+                    print_str += " "
+                print_str += " "
+            print_str += "\n"
+        return print_str
 
-    # Used row,col as inputs instead of Grid to make it easier to generate boards in formation.py
+    # used row,col as inputs instead of grid to make it easier to generate boards in formation.py
     def put(self, row: int, col: int, piece: Piece):
         self.__board[row][col] = piece
 
     def merge(self, board):
-        for row in range(constant.MIN_ROW, constant.MAX_ROW+1):
-            for col in range(constant.MIN_COL, constant.MAX_COL+1):
+        for row in range(constants.MIN_ROW, constants.MAX_ROW+1):
+            for col in range(constants.MIN_COL, constants.MAX_COL+1):
                 if board.get(row, col):
                     self.__board[row][col] = board.get(row, col)
 
@@ -46,25 +46,25 @@ class Board:
         self.__board[row][col] = None
 
     def rotate(self):
-        newBoard = [[None for i in range(self.numCols+1)]
-                    for j in range(self.numRows+1)]
-        for row in range(constant.MIN_ROW, constant.MAX_ROW+1):
-            for col in range(constant.MIN_COL, constant.MAX_COL+1):
+        new_board = [[None for i in range(self.num_cols+1)]
+                     for j in range(self.num_rows+1)]
+        for row in range(constants.MIN_ROW, constants.MAX_ROW+1):
+            for col in range(constants.MIN_COL, constants.MAX_COL+1):
                 if self.__board[row][col]:
-                    newBoard[self.numRows-row+1][self.numCols -
-                                                 col+1] = self.__board[row][col]
-        self.__board = newBoard
+                    new_board[self.num_rows-row+1][self.num_cols -
+                                                   col+1] = self.__board[row][col]
+        self.__board = new_board
 
-    def markCamp(self, camp: Camp):
-        for row in range(constant.MIN_ROW, constant.MAX_ROW+1):
-            for col in range(constant.MIN_COL, constant.MAX_COL+1):
+    def mark_camp(self, camp: Camp):
+        for row in range(constants.MIN_ROW, constants.MAX_ROW+1):
+            for col in range(constants.MIN_COL, constants.MAX_COL+1):
                 if self.__board[row][col]:
                     self.__board[row][col].camp = camp
 
-    def getScore(self, camp: Camp):
+    def get_score(self, camp: Camp):
         score = 0
-        for row in range(constant.MIN_ROW, constant.MAX_ROW+1):
-            for col in range(constant.MIN_COL, constant.MAX_COL+1):
+        for row in range(constants.MIN_ROW, constants.MAX_ROW+1):
+            for col in range(constants.MIN_COL, constants.MAX_COL+1):
                 if self.__board[row][col] and self.__board[row][col].camp == camp:
                     score += self.__board[row][col].value
         return score

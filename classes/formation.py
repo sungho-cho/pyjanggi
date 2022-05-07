@@ -10,7 +10,7 @@ class Formation(IntEnum):
     GWIMAMA = 3
     WONWANGMA = 4
 
-    def initialBoard(self):
+    def initial_board(self):
         board = Board()
         board.put(7, 1, Piece(PieceType.SOLDIER))
         board.put(7, 3, Piece(PieceType.SOLDIER))
@@ -30,8 +30,8 @@ class Formation(IntEnum):
         board.put(10, 9, Piece(PieceType.CHARIOT))
         return board
 
-    def makeBoard(self):
-        board = self.initialBoard()
+    def make_board(self):
+        board = self.initial_board()
         if self == self.YANGGWIMA:
             board.put(10, 2, Piece(PieceType.ELEPHANT))
             board.put(10, 3, Piece(PieceType.HORSE))

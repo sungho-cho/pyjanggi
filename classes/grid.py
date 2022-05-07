@@ -1,4 +1,4 @@
-from . import constant
+from . import constants
 
 
 class Grid:
@@ -6,11 +6,11 @@ class Grid:
         self.row = row if row != 0 else row+10
         self.col = col
 
-        if self.row < constant.MIN_ROW or self.row > constant.MAX_ROW:
-            raise Exception(f"Grid row is out of range: {self.row}")
+        if self.row < constants.MIN_ROW or self.row > constants.MAX_ROW:
+            raise Exception(f"grid row is out of range: {self.row}")
 
-        if self.col < constant.MIN_COL or self.col > constant.MAX_COL:
-            raise Exception(f"Grid column is out of range: {self.col}")
+        if self.col < constants.MIN_COL or self.col > constants.MAX_COL:
+            raise Exception(f"grid column is out of range: {self.col}")
 
     def __iter__(self):
         yield self.row
