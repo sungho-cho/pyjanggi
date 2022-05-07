@@ -1,12 +1,13 @@
 from . import constants
 from .piece import Piece
 from .camp import Camp
+from .grid import Grid
 
 
 class Board:
     def __init__(self):
-        self.num_rows = constants.MAX_ROW-constants.MIN_ROW+1
-        self.num_cols = constants.MAX_COL-constants.MIN_COL+1
+        self.num_rows = constants.MAX_ROW-constants.MIN_ROW+2
+        self.num_cols = constants.MAX_COL-constants.MIN_COL+2
         self.__board = [[None for i in range(self.num_cols+1)]
                         for j in range(self.num_rows+1)]
 
@@ -68,3 +69,11 @@ class Board:
                 if self.__board[row][col] and self.__board[row][col].camp == camp:
                     score += self.__board[row][col].value
         return score
+
+    def get_piece_locations(self, camp: Camp):
+        piece_locations = []
+        for row in range(constants.MIN_ROW, constants.MAX_ROW+1):
+            for col in range(constants.MIN_COL, constants.MAX_COL+1):
+                if self.__board[row][col] and self.__board[row][col].camp == camp:
+                    piece_locations.append(Grid(row, col))
+        return piece_locations
