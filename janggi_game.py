@@ -1,9 +1,9 @@
-from classes import constants
-from classes.board import Board
-from classes.camp import Camp
-from classes.formation import Formation
-from classes.piece import PieceType
-from classes.grid import Grid
+from .classes import constants
+from .classes.board import Board
+from .classes.camp import Camp
+from .classes.formation import Formation
+from .classes.piece import PieceType
+from .classes.grid import Grid
 
 
 class JanggiGame:
