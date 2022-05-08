@@ -15,16 +15,16 @@ class PieceType(Enum):
     CANNON = 6
     SOLDIER = 7
 
+from .move import MoveSet
 
 class Piece:
-    from .move import MoveSet
 
     def __init__(self, piece_type: PieceType):
         self.piece_type = piece_type
         self.camp = None
 
     def __int__(self):
-        if not self.camp:
+        if self.camp == None:
             raise Exception(
                 f"{self.piece_type} does not have a camp assigned.")
 
@@ -115,7 +115,7 @@ class Piece:
             move_sets.append(MoveSet([(-1, 0), (-1, -1), (-1, -1)]))
         return move_sets
 
-    def get_straight_move_sets(self, origin: Grid, piece_type: PieceType):
+    def get_straight_move_sets(self, origin: Grid):
         def _is_out_of_bound(row: int, col: int):
             return (row < constants.MIN_ROW or row > constants.MAX_ROW or
                     col < constants.MIN_COL or col > constants.MAX_COL)
@@ -128,8 +128,7 @@ class Piece:
                 row += dr
                 col += dc
                 steps.append((dr, dc))
-                move_sets.append(
-                    MoveSet(steps.copy(), piece_type == PieceType.CANNON))
+                move_sets.append(MoveSet(steps.copy()))
             return move_sets
 
         move_sets = []

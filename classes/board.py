@@ -6,8 +6,8 @@ from .grid import Grid
 
 class Board:
     def __init__(self):
-        self.num_rows = constants.MAX_ROW-constants.MIN_ROW+2
-        self.num_cols = constants.MAX_COL-constants.MIN_COL+2
+        self.num_rows = constants.MAX_ROW-constants.MIN_ROW+1
+        self.num_cols = constants.MAX_COL-constants.MIN_COL+1
         self.__board = [[None for i in range(self.num_cols+1)]
                         for j in range(self.num_rows+1)]
 

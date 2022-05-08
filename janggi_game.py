@@ -102,10 +102,9 @@ class JanggiGame:
         elif piece.piece_type == PieceType.HORSE or piece.piece_type == PieceType.ELEPHANT:
             move_sets = piece.get_jumpy_move_sets()
         elif piece.piece_type == PieceType.CHARIOT or piece.piece_type == PieceType.CANNON:
-            move_sets = piece.get_straight_move_sets(origin, piece.piece_type)
+            move_sets = piece.get_straight_move_sets(origin)
         elif piece.piece_type == PieceType.GENERAL or piece.piece_type == PieceType.GUARD:
-            move_sets = piece.get_jumpy_move_sets(
-                origin, self.player == self.turn)
+            move_sets = piece.get_jumpy_move_sets()
 
         move_sets = [ms for ms in move_sets if ms.is_valid(
             self.board, origin, self.turn)]
@@ -140,19 +139,3 @@ class JanggiGame:
 
         # TODO: Invalidate the move makes it enemy's "Janggun"
         return True
-
-    def _get_soldier_move_sets(self, origin: Grid):
-        piece = self.board.get(origin.row, origin.col)
-        return piece.get_soldier_move_sets(self.player == self.turn)
-
-    def _get_castle_move_sets(self, origin: Grid):
-        piece = self.board.get(origin.row, origin.col)
-        return piece.get_jumpy_move_sets(origin, self.player == self.turn)
-
-    def _get_jumpy_move_sets(self, origin: Grid):
-        piece = self.board.get(origin.row, origin.col)
-        return piece.get_jumpy_move_sets()
-
-    def _get_straight_move_sets(self, origin: Grid, piece_type: PieceType):
-        piece = self.board.get(origin.row, origin.col)
-        return piece.get_straight_move_sets(origin, piece_type)
