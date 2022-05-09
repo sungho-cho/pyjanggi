@@ -1,9 +1,9 @@
-from .classes import constants
-from .classes.board import Board
-from .classes.camp import Camp
-from .classes.formation import Formation
-from .classes.piece import PieceType
-from .classes.grid import Grid
+from . import constants
+from .board import Board
+from .camp import Camp
+from .formation import Formation
+from .piece import PieceType
+from .grid import Grid
 
 
 class JanggiGame:
@@ -17,8 +17,7 @@ class JanggiGame:
     def make_move(self, origin: Grid, dest: Grid):
         # validate the given move
         if not self._validate_move(origin, dest):
-            print("the move cannot be made!")
-            return
+            raise Exception("the move cannot be made!")
 
         # detenmine if game's over
         game_over = False
@@ -39,8 +38,6 @@ class JanggiGame:
 
         # switch "turn"
         self.turn = self.turn.opponent
-
-        print(self.board)
 
         return piece_value, game_over
 

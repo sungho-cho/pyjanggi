@@ -1,2 +1,9 @@
+# Cache
 classes/__pycache__/
 __pycache__/
+*.py[cod]
+
+# Distribution
+*.egg-info/
+dist/
+build/

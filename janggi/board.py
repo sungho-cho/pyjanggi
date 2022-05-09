@@ -8,18 +8,18 @@ class Board:
     def __init__(self):
         self.num_rows = constants.MAX_ROW-constants.MIN_ROW+1
         self.num_cols = constants.MAX_COL-constants.MIN_COL+1
-        self.__board = [[None for i in range(self.num_cols+1)]
-                        for j in range(self.num_rows+1)]
+        self.__board = [[None for i in range(self.num_cols)]
+                        for j in range(self.num_rows)]
 
     def __str__(self):
         print_str = ""
-        for row in range(constants.MAX_ROW+1):
-            for col in range(constants.MAX_COL+1):
-                if row == 0 and col > 0:
+        for row in range(-1, constants.MAX_ROW+1):
+            for col in range(-1, constants.MAX_COL+1):
+                if row == -1 and col >= 0:
                     print_str += " " + str(col)
-                elif row > 0 and col == 0:
+                elif row >= 0 and col == -1:
                     print_str += " " + str(row % 10)
-                elif row > 0 and col > 0:
+                elif row >= 0 and col >= 0:
                     if self.__board[row][col]:
                         print_str += str(self.__board[row][col])
                     else:
@@ -47,13 +47,13 @@ class Board:
         self.__board[row][col] = None
 
     def rotate(self):
-        new_board = [[None for i in range(self.num_cols+1)]
-                     for j in range(self.num_rows+1)]
+        new_board = [[None for i in range(self.num_cols)]
+                     for j in range(self.num_rows)]
         for row in range(constants.MIN_ROW, constants.MAX_ROW+1):
             for col in range(constants.MIN_COL, constants.MAX_COL+1):
                 if self.__board[row][col]:
-                    new_board[self.num_rows-row+1][self.num_cols -
-                                                   col+1] = self.__board[row][col]
+                    new_board[self.num_rows-row-1][self.num_cols -
+                                                   col-1] = self.__board[row][col]
         self.__board = new_board
 
     def mark_camp(self, camp: Camp):

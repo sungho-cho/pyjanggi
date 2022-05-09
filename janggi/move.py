@@ -10,6 +10,9 @@ class MoveSet:
     def __init__(self, moves: List[Tuple[int, int]]):
         self.moves = moves
 
+    def __str__(self):
+        return str(self.moves)
+
     def get_dest(self, board, origin: Grid, player: Camp):
         if self.is_valid(board, origin, player):
             row, col = (origin.row, origin.col)
