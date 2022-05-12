@@ -1,8 +1,8 @@
 import random
 
-from janggi_game import JanggiGame
-from classes.camp import Camp
-from classes.formation import Formation
+from janggi.janggi_game import JanggiGame
+from janggi.camp import Camp
+from janggi.formation import Formation
 
 if __name__ == '__main__':
     camp = Camp(random.randint(0, 1))

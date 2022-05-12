@@ -1,12 +1,19 @@
 from enum import Enum
 from termcolor import colored
+from typing import List
 
-from . import constants
+from .constants import (
+    MIN_ROW, MAX_ROW, MIN_COL, MAX_COL,
+    CASTLE_MIN_COL, CASTLE_MAX_COL,
+    CASTLE_TOP_MIN_ROW, CASTLE_TOP_MAX_ROW,
+    CASTLE_BOT_MIN_ROW, CASTLE_BOT_MAX_ROW,
+)
 from .camp import Camp
-from .grid import Grid
+from .location import Location
 
 
 class PieceType(Enum):
+    """Enum class representing a piece's type."""
     GENERAL = 1
     GUARD = 2
     HORSE = 3
@@ -15,15 +22,42 @@ class PieceType(Enum):
     CANNON = 6
     SOLDIER = 7
 
-from .move import MoveSet
+PIECE_VALUE = {
+    PieceType.GUARD: 3,
+    PieceType.HORSE: 5,
+    PieceType.ELEPHANT: 3,
+    PieceType.CHARIOT: 13,
+    PieceType.CANNON: 7,
+    PieceType.SOLDIER: 2,
+    PieceType.GENERAL: 0,
+}
 
+from .move import MoveSet # Imported here to avoid an import loop.
 class Piece:
-
+    """
+    Piece class represents a single piece on the game board.
+    The class is capable of getting move sets based on its piece type.
+    """
     def __init__(self, piece_type: PieceType):
+        """
+        Initialize Piece class by setting the given piece type.
+        Camp attribute is later initialized by Board.mark_camp.
+        """
         self.piece_type = piece_type
         self.camp = None
 
-    def __int__(self):
+    def __int__(self) -> int:
+        """
+        Get unique int value for the piece's type.
+        For all camp cho's pieces, this returns +(self.piece_type.value)
+        For all camp han's pieces, this returns -(self.piece_type.value)
+
+        Raises:
+            Exception: if a piece does not have a camp assigned yet.
+
+        Returns:
+            int: uniqued integer value for the piece's type.
+        """
         if self.camp == None:
             raise Exception(
                 f"{self.piece_type} does not have a camp assigned.")
@@ -34,20 +68,35 @@ class Piece:
             return self.piece_type.value
 
     @property
-    def value(self):
-        value_dict = {
-            PieceType.GUARD: 3,
-            PieceType.HORSE: 5,
-            PieceType.ELEPHANT: 3,
-            PieceType.CHARIOT: 13,
-            PieceType.CANNON: 7,
-            PieceType.SOLDIER: 2,
-            PieceType.GENERAL: 0,
-        }
-        return value_dict[self.piece_type]
+    def value(self) -> int:
+        """
+        Return piece's value based on its piece type. Each piece in Janggi has a 
+        value assigned, and the values contribute to the players' current scores.
 
-    def _piece_to_str(self):
-        piece_dict = {
+        Returns:
+            int: piece's value based on type.
+        """
+        return PIECE_VALUE[self.piece_type]
+
+    def __str__(self) -> str:
+        """
+        Return string representation of piece while applying different colors for each camp.
+        """
+        print_str = self._piece_to_chinese_character()
+        if self.camp == Camp.CHO:
+            print_str = colored(print_str, 'green')
+        elif self.camp == Camp.HAN:
+            print_str = colored(print_str, 'red')
+        return print_str
+
+    def _piece_to_chinese_character(self) -> str:
+        """
+        Return a Chinese character for the piece based on its type and camp.
+
+        Returns:
+            str: a single Chinese character for the piece.
+        """
+        piece_name_dict = {
             PieceType.GUARD: "士",
             PieceType.HORSE: "馬",
             PieceType.ELEPHANT: "象",
@@ -55,8 +104,8 @@ class Piece:
             PieceType.CANNON: "包",
         }
 
-        if self.piece_type in piece_dict:
-            return piece_dict[self.piece_type]
+        if self.piece_type in piece_name_dict:
+            return piece_name_dict[self.piece_type]
         else:
             if self.piece_type == PieceType.GENERAL:
                 if self.camp == Camp.CHO:
@@ -69,31 +118,48 @@ class Piece:
                 else:
                     return "兵"
 
-    def __str__(self):
-        print_str = self._piece_to_str()
-        if self.camp == Camp.CHO:
-            print_str = colored(print_str, 'green')
-        elif self.camp == Camp.HAN:
-            print_str = colored(print_str, 'red')
-        return print_str
+    def get_soldier_move_sets(self, is_player: bool) -> List[MoveSet]:
+        """
+        Get move sets for soldier pieces.
+        The directions a soldier piece can take depends on which camp it belongs to.
 
-    def get_soldier_move_sets(self, is_player: bool):
+        Args:
+            is_player (bool): True if the piece belongs to the main player; False otherwise.
+
+        Returns:
+            List[MoveSet]: All move sets a soldier piece can make regardless of validity.
+        """
         steps = [(0, -1), (0, 1)]
         steps += [(-1, 0)] if is_player else [(1, 0)]
         return [MoveSet([(dr, dc)]) for (dr, dc) in steps]
 
-    def get_castle_move_sets(self, origin: Grid, is_player: bool):
-        def is_out_of_bound(row: int, col: int):
-            return (col < 4 or col > 6 or
-                    (is_player and (row < 8 or row > 10)) and
-                    (is_player and (row < 1 or row > 3)))
-        steps = [(i, j) for i in range(-1, 2) for j in range(-1, 2)]
-        steps.remove((0, 0))
-        steps = [(i, j) for (i, j) in steps
-                 if not is_out_of_bound(origin.row+i, origin.col+j)]
+    def get_castle_move_sets(self, origin: Location, is_player: bool) -> List[MoveSet]:
+        """
+        Get move sets for castle pieces (generals and guards).
+        The directions a soldier piece can take depends on which camp it belongs to.
+
+        Args:
+            origin (Location): Original location of the piece.
+            is_player (bool): True if the piece belongs to the main player; False otherwise.
+
+        Returns:
+            List[MoveSet]: All move sets a castle piece can make regardless of validity.
+        """
+        def _is_out_of_bound(row: int, col: int):
+            return (col < CASTLE_MIN_COL or col > CASTLE_MAX_COL or
+                (is_player and (row < CASTLE_BOT_MIN_ROW or row > CASTLE_BOT_MAX_ROW)) and
+                (not is_player and (row < CASTLE_TOP_MIN_ROW or row > CASTLE_TOP_MAX_ROW)))
+        steps = [(i, j) for i in range(-1, 2) for j in range(-1, 2)  if i != 0 or j != 0]
+        steps = [(i, j) for (i, j) in steps if not _is_out_of_bound(origin.row+i, origin.col+j)]
         return [MoveSet([(dr, dc)]) for (dr, dc) in steps]
 
-    def get_jumpy_move_sets(self):
+    def get_jumpy_move_sets(self) -> List[MoveSet]:
+        """
+        Get move sets for jumpy pieces (horses and elephants).
+
+        Returns:
+            List[MoveSet]: All move sets a jumpy piece can make regardless of validity.
+        """
         move_sets = []
         if self.piece_type == PieceType.HORSE:
             move_sets.append(MoveSet([(0, 1), (-1, 1)]))
@@ -115,12 +181,21 @@ class Piece:
             move_sets.append(MoveSet([(-1, 0), (-1, -1), (-1, -1)]))
         return move_sets
 
-    def get_straight_move_sets(self, origin: Grid):
-        def _is_out_of_bound(row: int, col: int):
-            return (row < constants.MIN_ROW or row > constants.MAX_ROW or
-                    col < constants.MIN_COL or col > constants.MAX_COL)
+    def get_straight_move_sets(self, origin: Location) -> List[MoveSet]:
+        """
+        Get move sets for straight pieces (chariots and cannons).
 
-        def _get_move_sets_in_direction(origin: Grid, dr: int, dc: int):
+        Args:
+            origin (Location): Original location of the piece.
+
+        Returns:s
+            List[MoveSet]: All move sets a straight piece can make regardless of validity.
+        """
+        def _is_out_of_bound(row: int, col: int):
+            return (row < MIN_ROW or row > MAX_ROW or
+                    col < MIN_COL or col > MAX_COL)
+
+        def _get_move_sets_in_direction(origin: Location, dr: int, dc: int):
             (row, col) = (origin.row, origin.col)
             steps = []
             move_sets = []
