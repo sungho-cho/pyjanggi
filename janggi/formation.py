@@ -9,15 +9,14 @@ class Formation(IntEnum):
     Enum class that represents 4 different formations of the game of Janggi.
     See https://en.wikipedia.org/wiki/Janggi#Setting_up for details on formations.
     In Korean terminology,
-    Yang-gwi-ma is the outer elephant setup,
-    Gwi-ma-sang is the left elephant setup,
-    Gwi-ma-ma is the right elephant setup, and
-    Won-wang-ma is the inner elephant setup.
+    the inner elephant setup is called Won-Ang-Ma,
+    the outer elephant setup is called Yang-Gwi-Ma,
+    the left elephant and right elephant setup are called Gwi-Ma.
     """
-    YANGGWIMA = 1
-    GWIMASANG = 2
-    GWIMAMA = 3
-    WONWANGMA = 4
+    INNER_ELEPHANT = 1
+    OUTER_ELEPHANT = 2
+    LEFT_ELEPHANT = 3
+    RIGHT_ELEPHANT = 4
 
     def make_board(self) -> Board:
         """
@@ -28,25 +27,25 @@ class Formation(IntEnum):
                    Can be rotated and merged with another half-board.
         """
         board = self._initial_board()
-        if self == self.YANGGWIMA:
+        if self == self.OUTER_ELEPHANT:
             board.put(9, 1, Piece(PieceType.ELEPHANT))
             board.put(9, 2, Piece(PieceType.HORSE))
             board.put(9, 6, Piece(PieceType.HORSE))
             board.put(9, 7, Piece(PieceType.ELEPHANT))
 
-        elif self == self.GWIMASANG:
+        elif self == self.LEFT_ELEPHANT:
             board.put(9, 1, Piece(PieceType.ELEPHANT))
             board.put(9, 2, Piece(PieceType.HORSE))
             board.put(9, 6, Piece(PieceType.ELEPHANT))
             board.put(9, 7, Piece(PieceType.HORSE))
 
-        elif self == self.GWIMAMA:
+        elif self == self.RIGHT_ELEPHANT:
             board.put(9, 1, Piece(PieceType.HORSE))
             board.put(9, 2, Piece(PieceType.ELEPHANT))
             board.put(9, 6, Piece(PieceType.HORSE))
             board.put(9, 7, Piece(PieceType.ELEPHANT))
 
-        elif self == self.WONWANGMA:
+        elif self == self.INNER_ELEPHANT:
             board.put(9, 1, Piece(PieceType.HORSE))
             board.put(9, 2, Piece(PieceType.ELEPHANT))
             board.put(9, 6, Piece(PieceType.ELEPHANT))
