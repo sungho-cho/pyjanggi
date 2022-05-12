@@ -28,6 +28,7 @@ class JanggiGame:
         self.player = player
         self.turn = Camp.CHO
         self.cho_score = self.han_score = 0.0
+        self.history = []
         self._initialize_board(cho_formation, han_formation)
 
     def make_action(self, origin: Location, dest: Location) -> Tuple[int, bool]:
@@ -68,6 +69,9 @@ class JanggiGame:
 
         # switch "turn"
         self.turn = self.turn.opponent
+
+        # record move history
+        self.history.append((origin, dest))
 
         return piece_value, game_over
 
