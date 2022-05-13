@@ -1,11 +1,11 @@
-from setuptools import find_packages, setup
+from setuptools import setup
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
     name="janggi",
-    version="0.9.0",
+    version="0.9.1",
     author="Sungho Cho",
     author_email="didog9595@gmail.com",
     description="Python library for Korean chess Janggi",
@@ -17,8 +17,7 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    package_dir={"": "janggi"},
-    packages=find_packages(where="janggi"),
+    packages=["janggi"],
     python_requires=">=3.6",
     install_requires=["termcolor==1.1.0"],
 )
