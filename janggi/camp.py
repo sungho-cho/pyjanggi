@@ -6,8 +6,8 @@ class Camp(IntEnum):
     Enum that represents two sides of the game of Janggi.
     It's just like black and white in chess except it's called cho and han.
     """
-    CHO = 0
-    HAN = 1
+    CHO = 1
+    HAN = -1
 
     @property
     def opponent(self) -> Camp:
@@ -17,4 +17,4 @@ class Camp(IntEnum):
         Returns:
             Camp: Opponent's enum instance.
         """
-        return Camp(1-self)
+        return Camp(self * -1)
