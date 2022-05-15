@@ -29,7 +29,7 @@ class Location:
 
     def __str__(self) -> str:
         """Return string representation of location."""
-        return f"Location({self.row},{self.col})"
+        return f"({self.row},{self.col})"
 
     def __iter__(self) -> Iterable:
         """Make location iterable so that it can easily be converted into a tuple or list."""
