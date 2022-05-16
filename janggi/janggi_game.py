@@ -37,7 +37,7 @@ class JanggiGame:
         self.initial_board = self.board.copy()
         self._update_scores()
 
-    def make_action(self, origin: Location, dest: Location) -> Tuple[int, bool]:
+    def make_action(self, origin: Location, dest: Location) -> Tuple[float, bool]:
         """
         Move a piece from the given origin location to the given destination.
 
@@ -49,7 +49,7 @@ class JanggiGame:
             Exception: When the given action is invalid.
 
         Returns:
-            piece_value (int): An enemy piece's value if it was killed; 0 otherwise.
+            piece_value (float): An enemy piece's value if it was killed; 0 otherwise.
             game_over (bool): True if the action ends the game; False otherwise.
         """
         # validate the given action
@@ -79,7 +79,7 @@ class JanggiGame:
         # record move logs
         self.move_logs.append((origin, dest))
 
-        return piece_value, game_over
+        return float(piece_value), game_over
 
     def get_all_actions(self) -> List[Tuple[Location, Location]]:
         """
