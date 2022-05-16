@@ -46,9 +46,9 @@ class Piece:
         self.piece_type = piece_type
         self.camp = None
 
-    def __int__(self) -> int:
+    def __float__(self) -> float:
         """
-        Get unique int value for the piece's type.
+        Get unique float value for the piece's type.
         For all camp cho's pieces, this returns +(self.piece_type.value)
         For all camp han's pieces, this returns -(self.piece_type.value)
 
@@ -56,16 +56,16 @@ class Piece:
             Exception: if a piece does not have a camp assigned yet.
 
         Returns:
-            int: uniqued integer value for the piece's type.
+            float: uniqued float value for the piece's type.
         """
         if self.camp == None:
             raise Exception(
                 f"{self.piece_type} does not have a camp assigned.")
 
         if self.camp == Camp.HAN:
-            return self.piece_type.value * -1
+            return float(self.piece_type.value) * -1.0
         else:
-            return self.piece_type.value
+            return float(self.piece_type.value)
 
     @property
     def value(self) -> int:
