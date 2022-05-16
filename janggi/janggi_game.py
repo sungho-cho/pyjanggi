@@ -32,8 +32,7 @@ class JanggiGame:
         self.turn = Camp.CHO
         self.cho_score = self.han_score = 0.0
         self.move_logs = []
-        self.board = Board()
-        self._initialize_board(cho_formation, han_formation)
+        self.board = Board.full_board_from_formations(cho_formation, han_formation, player)
         self.initial_board = self.board.copy()
         self._update_scores()
 
@@ -96,27 +95,6 @@ class JanggiGame:
             possible_actions += [(piece_location, dest_location)
                                  for dest_location in destinations]
         return possible_actions
-
-    def _initialize_board(self, cho_formation: Formation, han_formation: Formation):
-        """
-        Initialize a Janggi board by setting up two half-boards for each cho and han,
-        merging the two half-boards and setting scores for both players.
-
-        Args:
-            cho_formation (Formation): Formation of camp cho.
-            han_formation (Formation): Formation of camp han.
-        """
-        cho_board = cho_formation.make_board()
-        han_board = han_formation.make_board()
-        cho_board.mark_camp(Camp.CHO)
-        han_board.mark_camp(Camp.HAN)
-        if self.player == Camp.CHO:
-            han_board.rotate()
-        else:
-            cho_board.rotate()
-
-        self.board.merge(cho_board)
-        self.board.merge(han_board)
 
     def _update_scores(self):
         """

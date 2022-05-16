@@ -3,8 +3,9 @@ import numpy as np
 from typing import List
 
 from .constants import MIN_ROW, MAX_ROW, MIN_COL, MAX_COL, NUM_ROWS, NUM_COLS
-from .piece import Piece
+from .piece import Piece, PieceType
 from .camp import Camp
+from .formation import Formation
 from .location import Location
 
 
@@ -13,11 +14,11 @@ class Board:
     Simple board class used for the game of Janggi. Contains and handles a single 
     10x9 two-dimensional list that contains either a Piece object or None.
     """
-    def __init__(self, board=None):
-        if board is not None:
-            self.__board = board
-        else:
-            self.__board = np.full((NUM_ROWS, NUM_COLS), None)
+    def __init__(self, cho_formation: Formation, han_formation: Formation, bottom_camp: Camp):
+        self.cho_formation = cho_formation
+        self.han_formation = han_formation
+        self.bottom_camp = bottom_camp
+        self.__board = np.full((NUM_ROWS, NUM_COLS), None)
 
     def __str__(self) -> str:
         """Generate colored and structured string representation of the board."""
@@ -37,7 +38,45 @@ class Board:
                     print_str += " "
                 print_str += " "
             print_str += "\n"
-        return print_str        
+        return print_str
+
+    @classmethod
+    def full_board_from_formations(cls, cho_formation: Formation, han_formation: Formation, player: Camp) -> Board:
+        """
+        Return Board class instance that represents a full board.
+
+        Args:
+            cho_formation (Formation): Formation of Camp Cho.
+            han_formation (Formation): Formation of Camp Han.
+            player (Camp): Camp that the player is playing. This is used to assign that camp as the bottom camp.
+
+        Returns:
+            Board: Full Board class.
+        """
+        board = cls(cho_formation, han_formation, player)
+        cho_half_board = Board._generate_half_board(cho_formation)
+        han_half_board = Board._generate_half_board(han_formation)
+        cho_half_board.mark_camp(Camp.CHO)
+        han_half_board.mark_camp(Camp.HAN)
+        if player == Camp.CHO:
+            han_half_board.rotate()
+        else:
+            cho_half_board.rotate()
+        board.merge(cho_half_board)
+        board.merge(han_half_board)
+
+        return board
+
+    def copy(self) -> Board:
+        """
+        Return a copied Board class.
+
+        Returns:
+            Board: Copied version of the board.
+        """
+        copied_board = Board(self.cho_formation, self.han_formation, self.bottom_camp)
+        copied_board.__board = self.__board.copy()
+        return copied_board
 
     def put(self, row: int, col: int, piece: Piece):
         """
@@ -86,15 +125,6 @@ class Board:
             col (int): Column of the piece to be removed.
         """
         self.__board[row][col] = None
-
-    def copy(self) -> Board:
-        """
-        Return a copied Board class
-
-        Returns:
-            Board: Copied version of the board
-        """
-        return Board(self.__board.copy())
 
     def rotate(self):
         """Rotate the board 180 degrees and update self.__board."""
@@ -151,3 +181,57 @@ class Board:
                 if self.__board[row][col] and self.__board[row][col].camp == camp:
                     piece_locations.append(Location(row, col))
         return piece_locations
+
+    @classmethod
+    def _generate_half_board(cls, formation: Formation) -> Board:
+        """
+        Generate half-board that only contains pieces for a single side.
+
+        Args:
+            formation (Formation): Formation of the half board.
+
+        Returns:
+            Board: Half-board that contains pieces for only one camp.
+        """
+        board = cls(Formation.UNDECIDED, Formation.UNDECIDED, Camp.UNDEDCIDED)
+        board.put(6, 0, Piece(PieceType.SOLDIER))
+        board.put(6, 2, Piece(PieceType.SOLDIER))
+        board.put(6, 4, Piece(PieceType.SOLDIER))
+        board.put(6, 6, Piece(PieceType.SOLDIER))
+        board.put(6, 8, Piece(PieceType.SOLDIER))
+
+        board.put(7, 1, Piece(PieceType.CANNON))
+        board.put(7, 7, Piece(PieceType.CANNON))
+
+        board.put(8, 4, Piece(PieceType.GENERAL))
+
+        board.put(9, 3, Piece(PieceType.GUARD))
+        board.put(9, 5, Piece(PieceType.GUARD))
+
+        board.put(9, 0, Piece(PieceType.CHARIOT))
+        board.put(9, 8, Piece(PieceType.CHARIOT))
+
+        if formation == Formation.OUTER_ELEPHANT:
+            board.put(9, 1, Piece(PieceType.ELEPHANT))
+            board.put(9, 2, Piece(PieceType.HORSE))
+            board.put(9, 6, Piece(PieceType.HORSE))
+            board.put(9, 7, Piece(PieceType.ELEPHANT))
+
+        elif formation == Formation.LEFT_ELEPHANT:
+            board.put(9, 1, Piece(PieceType.ELEPHANT))
+            board.put(9, 2, Piece(PieceType.HORSE))
+            board.put(9, 6, Piece(PieceType.ELEPHANT))
+            board.put(9, 7, Piece(PieceType.HORSE))
+
+        elif formation == Formation.RIGHT_ELEPHANT:
+            board.put(9, 1, Piece(PieceType.HORSE))
+            board.put(9, 2, Piece(PieceType.ELEPHANT))
+            board.put(9, 6, Piece(PieceType.HORSE))
+            board.put(9, 7, Piece(PieceType.ELEPHANT))
+
+        elif formation == Formation.INNER_ELEPHANT:
+            board.put(9, 1, Piece(PieceType.HORSE))
+            board.put(9, 2, Piece(PieceType.ELEPHANT))
+            board.put(9, 6, Piece(PieceType.ELEPHANT))
+            board.put(9, 7, Piece(PieceType.HORSE))
+        return board

@@ -8,6 +8,7 @@ class Camp(IntEnum):
     """
     CHO = 1
     HAN = -1
+    UNDEDCIDED = 0
 
     @property
     def opponent(self) -> Camp:
