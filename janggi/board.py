@@ -14,7 +14,7 @@ class Board:
     10x9 two-dimensional list that contains either a Piece object or None.
     """
     def __init__(self, board=None):
-        if board:
+        if board is not None:
             self.__board = board
         else:
             self.__board = np.full((NUM_ROWS, NUM_COLS), None)
@@ -98,8 +98,7 @@ class Board:
 
     def rotate(self):
         """Rotate the board 180 degrees and update self.__board."""
-        new_board = [[None for i in range(NUM_ROWS)]
-                     for j in range(NUM_COLS)]
+        new_board = np.full((NUM_ROWS, NUM_COLS), None)
         for row in range(MIN_ROW, MAX_ROW+1):
             for col in range(MIN_COL, MAX_COL+1):
                 if self.__board[row][col]:
