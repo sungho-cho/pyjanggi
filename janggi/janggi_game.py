@@ -26,10 +26,16 @@ class JanggiGame:
             han_formation (Formation): Formation of camp han.
         """
         self.player = player
+        self.cho_formation = cho_formation
+        self.han_formation = han_formation
+
         self.turn = Camp.CHO
         self.cho_score = self.han_score = 0.0
-        self.history = []
+        self.move_logs = []
+        self.board = Board()
         self._initialize_board(cho_formation, han_formation)
+        self.initial_board = self.board.copy()
+        self._update_scores()
 
     def make_action(self, origin: Location, dest: Location) -> Tuple[int, bool]:
         """
@@ -70,8 +76,8 @@ class JanggiGame:
         # switch "turn"
         self.turn = self.turn.opponent
 
-        # record move history
-        self.history.append((origin, dest))
+        # record move logs
+        self.move_logs.append((origin, dest))
 
         return piece_value, game_over
 
@@ -100,7 +106,6 @@ class JanggiGame:
             cho_formation (Formation): Formation of camp cho.
             han_formation (Formation): Formation of camp han.
         """
-        self.board = Board()
         cho_board = cho_formation.make_board()
         han_board = han_formation.make_board()
         cho_board.mark_camp(Camp.CHO)
@@ -112,15 +117,13 @@ class JanggiGame:
 
         self.board.merge(cho_board)
         self.board.merge(han_board)
-        self._update_scores()
 
     def _update_scores(self):
         """
         Update cho and han's scores by summing up each of their piece's value.
         """
         self.cho_score = self.board.get_score(Camp.CHO)
-        self.han_score = self.board.get_score(
-            Camp.HAN) + HAN_ADVANTAGE
+        self.han_score = self.board.get_score(Camp.HAN) + HAN_ADVANTAGE
 
     def _get_all_destinations(self, origin: Location) -> List[Location]:
         """

@@ -1,7 +1,8 @@
 from __future__ import annotations
+import numpy as np
 from typing import List
 
-from .constants import MIN_ROW, MAX_ROW, MIN_COL, MAX_COL
+from .constants import MIN_ROW, MAX_ROW, MIN_COL, MAX_COL, NUM_ROWS, NUM_COLS
 from .piece import Piece
 from .camp import Camp
 from .location import Location
@@ -12,11 +13,11 @@ class Board:
     Simple board class used for the game of Janggi. Contains and handles a single 
     10x9 two-dimensional list that contains either a Piece object or None.
     """
-    def __init__(self):
-        self.num_rows = MAX_ROW-MIN_ROW+1
-        self.num_cols = MAX_COL-MIN_COL+1
-        self.__board = [[None for i in range(self.num_cols)]
-                        for j in range(self.num_rows)]
+    def __init__(self, board=None):
+        if board:
+            self.__board = board
+        else:
+            self.__board = np.full((NUM_ROWS, NUM_COLS), None)
 
     def __str__(self) -> str:
         """Generate colored and structured string representation of the board."""
@@ -36,7 +37,7 @@ class Board:
                     print_str += " "
                 print_str += " "
             print_str += "\n"
-        return print_str
+        return print_str        
 
     def put(self, row: int, col: int, piece: Piece):
         """
@@ -86,15 +87,23 @@ class Board:
         """
         self.__board[row][col] = None
 
+    def copy(self) -> Board:
+        """
+        Return a copied Board class
+
+        Returns:
+            Board: Copied version of the board
+        """
+        return Board(self.__board.copy())
+
     def rotate(self):
         """Rotate the board 180 degrees and update self.__board."""
-        new_board = [[None for i in range(self.num_cols)]
-                     for j in range(self.num_rows)]
+        new_board = [[None for i in range(NUM_ROWS)]
+                     for j in range(NUM_COLS)]
         for row in range(MIN_ROW, MAX_ROW+1):
             for col in range(MIN_COL, MAX_COL+1):
                 if self.__board[row][col]:
-                    new_board[self.num_rows-row-1][self.num_cols -
-                                                   col-1] = self.__board[row][col]
+                    new_board[NUM_ROWS-row-1][NUM_COLS-col-1] = self.__board[row][col]
         self.__board = new_board
 
     def mark_camp(self, camp: Camp):
