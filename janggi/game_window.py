@@ -44,6 +44,7 @@ class GameWindow:
                         (x, y) = (COL_MARGIN + COL_GAP * col, ROW_MARGIN + ROW_GAP * row)
                         self.display.blit(piece_img, (x, y))
                         
+        pygame.event.pump()
         pygame.display.update()
     
     def _initialize_board_image(self):
