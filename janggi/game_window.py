@@ -2,10 +2,11 @@ import logging
 import os
 import pkg_resources
 import pygame
+from typing import Optional
 
 from .board import Board
 from .camp import Camp
-from .piece import Piece, PieceType
+from .piece import PieceType
 from .constants import MIN_ROW, MAX_ROW, MIN_COL, MAX_COL
 
 WIDTH, HEIGHT = 500, 500
@@ -17,7 +18,8 @@ IMG_PATH = "images/"
 BOARD_FILENAME = "board.png"
 
 class GameWindow:
-    def __init__(self, board: Board = None):
+    """Class that renders board display using pygame."""
+    def __init__(self, board: Optional[Board] = None):
         pygame.init()
         pygame.display.set_caption("Janggi")
         self.display = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -64,8 +66,3 @@ class GameWindow:
     def _camp_piece_type_to_image_path(self, camp: Camp, piece_type: PieceType):
         filename = f"{camp.name.lower()}_{piece_type.name.lower()}.png"
         return os.path.join(IMG_PATH, filename)
-
-    def _piece_to_image_path(self, piece: Piece):
-        if piece.camp is None:
-            logging.warning(f"(GameWindow) Camp is not assigned for piece {piece.piece_type}")
-        return self._camp_piece_type_to_image_path(piece.camp, piece.piece_type)
