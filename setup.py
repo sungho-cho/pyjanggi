@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="janggi",
-    version="0.9.10",
+    version="0.9.11",
     author="Sungho Cho",
     author_email="didog9595@gmail.com",
     description="Python library for Korean chess Janggi",
@@ -17,7 +17,7 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    packages=["janggi"],
+    packages=["janggi", "janggi/base", "janggi/game"],
     include_package_data=True,
     python_requires=">=3.6",
     install_requires=["termcolor==1.1.0", "pygame==2.1.2"],

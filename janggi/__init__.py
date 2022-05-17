@@ -1,9 +1,11 @@
 from . import constants
-from .board import Board
-from .camp import Camp
-from .formation import Formation
-from .game_window import GameWindow
-from .location import Location
-from .move import MoveSet
-from .piece import Piece, PieceType
-from .janggi_game import JanggiGame
+from .base.board import Board
+from .base.camp import Camp
+from .base.formation import Formation
+from .base.location import Location
+from .base.move import MoveSet
+from .base.piece import Piece, PieceType
+from .game.janggi_game import JanggiGame
+from .game.game_log import GameLog
+from .game.game_window import GameWindow
+from .game.replay_viewer import ReplayViewer

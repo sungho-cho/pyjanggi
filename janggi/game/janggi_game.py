@@ -1,12 +1,12 @@
 from typing import List, Tuple
 
-from .constants import MIN_ROW, MAX_ROW, MIN_COL, MAX_COL, HAN_ADVANTAGE
-from .board import Board
-from .camp import Camp
-from .formation import Formation
-from .piece import PieceType
-from .location import Location
-from .move import MoveSet
+from ..constants import MIN_ROW, MAX_ROW, MIN_COL, MAX_COL, HAN_ADVANTAGE
+from ..base.board import Board
+from ..base.camp import Camp
+from ..base.formation import Formation
+from ..base.piece import PieceType
+from ..base.location import Location
+from ..base.move import MoveSet
 
 
 class JanggiGame:
@@ -55,19 +55,16 @@ class JanggiGame:
         if not self._validate_action(origin, dest):
             raise Exception("The action cannot be made!")
 
+        # make the action
+        piece_removed = self.board.move(origin, dest)
+
         # detenmine if game's over
         game_over = False
         piece_value = 0
-        dest_piece = self.board.get(dest.row, dest.col)
-        if dest_piece:
-            piece_value = dest_piece.value
-            if dest_piece.piece_type == PieceType.GENERAL:
+        if piece_removed:
+            piece_value = piece_removed.value
+            if piece_removed.piece_type == PieceType.GENERAL:
                 game_over = True
-
-        # make the action
-        piece = self.board.get(origin.row, origin.col)
-        self.board.remove(origin.row, origin.col)
-        self.board.put(dest.row, dest.col, piece)
 
         # update cho and han's scores
         self._update_scores()
@@ -89,7 +86,7 @@ class JanggiGame:
               where it means a piece at origin location being moved to dest location.
         """
         possible_actions = []
-        piece_locations = self.board.get_piece_locations(self.turn)
+        piece_locations = self.board.get_piece_locations_for_camp(self.turn)
         for piece_location in piece_locations:
             destinations = self._get_all_destinations(piece_location)
             possible_actions += [(piece_location, dest_location)

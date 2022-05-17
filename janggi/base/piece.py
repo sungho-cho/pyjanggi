@@ -2,7 +2,7 @@ from enum import Enum
 from termcolor import colored
 from typing import List
 
-from .constants import (
+from ..constants import (
     MIN_ROW, MAX_ROW, MIN_COL, MAX_COL,
     CASTLE_MIN_COL, CASTLE_MAX_COL,
     CASTLE_TOP_MIN_ROW, CASTLE_TOP_MAX_ROW,

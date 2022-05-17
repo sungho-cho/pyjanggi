@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-from .constants import MIN_ROW, MAX_ROW, MIN_COL, MAX_COL
+from ..constants import MIN_ROW, MAX_ROW, MIN_COL, MAX_COL
 from .location import Location
 from .camp import Camp
 from .piece import PieceType

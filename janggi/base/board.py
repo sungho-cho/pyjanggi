@@ -1,8 +1,8 @@
 from __future__ import annotations
 import numpy as np
-from typing import List
+from typing import List, Optional
 
-from .constants import MIN_ROW, MAX_ROW, MIN_COL, MAX_COL, NUM_ROWS, NUM_COLS
+from ..constants import MIN_ROW, MAX_ROW, MIN_COL, MAX_COL, NUM_ROWS, NUM_COLS
 from .piece import Piece, PieceType
 from .camp import Camp
 from .formation import Formation
@@ -126,6 +126,22 @@ class Board:
         """
         self.__board[row][col] = None
 
+    def move(self, origin: Location, dest: Location) -> Optional[Piece]:
+        """
+        Move piece from origin to destination and return the piece that was
+        originally placed at the given dest.
+
+        Args:
+            origin (Location): Original location of the piece being played.
+            dest (Location): Destination of the piece being played.
+        """
+        assert self.get(origin.row, origin.col) is not None
+        piece_to_remove = self.get(dest.row, dest.col)
+        piece = self.get(origin.row, origin.col)
+        self.put(dest.row, dest.col, piece)
+        self.remove(origin.row, origin.col)
+        return piece_to_remove
+
     def rotate(self):
         """Rotate the board 180 degrees and update self.__board."""
         new_board = np.full((NUM_ROWS, NUM_COLS), None)
@@ -165,7 +181,21 @@ class Board:
                     score += self.__board[row][col].value
         return score
 
-    def get_piece_locations(self, camp: Camp) -> List[Location]:
+    def get_piece_locations(self) -> List[Location]:
+        """
+        Get locations of all pieces on the board.
+
+        Returns:
+            List[Location]: List of all locations of the pieces on the board.
+        """
+        piece_locations = []
+        for row in range(MIN_ROW, MAX_ROW+1):
+            for col in range(MIN_COL, MAX_COL+1):
+                if self.__board[row][col]:
+                    piece_locations.append(Location(row, col))
+        return piece_locations
+
+    def get_piece_locations_for_camp(self, camp: Camp) -> List[Location]:
         """
         Get locations of all pieces with the given camp.
 

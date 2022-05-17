@@ -1,5 +1,5 @@
 from typing import Iterable
-from .constants import MIN_ROW, MAX_ROW, MIN_COL, MAX_COL
+from ..constants import MIN_ROW, MAX_ROW, MIN_COL, MAX_COL
 
 
 class Location:

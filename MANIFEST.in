@@ -1,1 +1,1 @@
-recursive-include janggi/images *.png
+recursive-include janggi/game/images *.png

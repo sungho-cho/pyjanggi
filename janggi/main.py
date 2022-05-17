@@ -1,10 +1,17 @@
+import logging
 import random
 import time
 
-from janggi.janggi_game import JanggiGame
-from janggi.camp import Camp
-from janggi.formation import Formation
-from janggi.game_window import GameWindow
+from janggi import Camp
+from janggi import Formation
+from janggi import Location
+from janggi import GameLog
+from janggi import JanggiGame
+from janggi import GameWindow
+from janggi import ReplayViewer
+
+logging.basicConfig()
+logging.root.setLevel(logging.INFO)
 
 if __name__ == '__main__':
     camp = Camp(random.choice([-1, 1]))
@@ -14,6 +21,8 @@ if __name__ == '__main__':
     print(f"cho: {game.cho_score} / han: {game.han_score}")
     print(game.board)
 
-    game_window = GameWindow(game.board)
-    game_window.render()
-    time.sleep(10)
+    # Test replay viewer
+    moves = [(Location(3,0), Location(3,1)), (Location(6,8), Location(6,7)), (Location(0,0), Location(4,0))]
+    game_log = GameLog(cho_formation, han_formation, camp, moves)
+    replay_viewer = ReplayViewer(game_log)
+    replay_viewer.run()
