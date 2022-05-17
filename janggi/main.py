@@ -14,6 +14,6 @@ if __name__ == '__main__':
     print(f"cho: {game.cho_score} / han: {game.han_score}")
     print(game.board)
 
-    game_window = GameWindow()
+    game_window = GameWindow(game.board)
     game_window.render()
-    time.sleep(5)
+    time.sleep(10)
