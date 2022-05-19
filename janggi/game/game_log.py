@@ -57,8 +57,8 @@ class GameLog:
         log_proto.bottom_camp = self.bottom_camp.to_proto()
         for origin, dest in self.move_log:
             move_proto = log_proto.moves.add()
-            move_proto.origin = origin.to_proto()
-            move_proto.dest = dest.to_proto()
+            move_proto.origin.CopyFrom(origin.to_proto())
+            move_proto.dest.CopyFrom(dest.to_proto())
         return log_proto
 
     def next(self) -> Board:
