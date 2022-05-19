@@ -9,7 +9,7 @@ def replay(filepath: str):
     Args:
         filepath (str): Path of the proto-serialized log file.
     """
-    log_file = open(filepath, "r")
+    log_file = open(filepath, "rb")
     log_proto = log_pb2.Log()
     log_proto.ParseFromString(log_file.read())
     game_log = GameLog.from_proto(log_proto)

@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="janggi",
-    version="0.9.14",
+    version="0.9.15",
     author="Sungho Cho",
     author_email="didog9595@gmail.com",
     description="Python library for Korean chess Janggi",
