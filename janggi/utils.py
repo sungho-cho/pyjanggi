@@ -13,5 +13,6 @@ def replay(filepath: str):
     log_proto = log_pb2.Log()
     log_proto.ParseFromString(log_file.read())
     game_log = GameLog.from_proto(log_proto)
+    game_log.generate_board_log()
     replay_viewer = ReplayViewer(game_log)
     replay_viewer.run()
