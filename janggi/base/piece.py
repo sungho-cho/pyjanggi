@@ -147,9 +147,9 @@ class Piece:
         """
         def _is_out_of_bound(row: int, col: int):
             return (col < CASTLE_MIN_COL or col > CASTLE_MAX_COL or
-                (is_player and (row < CASTLE_BOT_MIN_ROW or row > CASTLE_BOT_MAX_ROW)) and
+                (is_player and (row < CASTLE_BOT_MIN_ROW or row > CASTLE_BOT_MAX_ROW)) or
                 (not is_player and (row < CASTLE_TOP_MIN_ROW or row > CASTLE_TOP_MAX_ROW)))
-        steps = [(i, j) for i in range(-1, 2) for j in range(-1, 2)  if i != 0 or j != 0]
+        steps = [(i, j) for i in range(-1, 2) for j in range(-1, 2) if i != 0 or j != 0]
         steps = [(i, j) for (i, j) in steps if not _is_out_of_bound(origin.row+i, origin.col+j)]
         return [MoveSet([(dr, dc)]) for (dr, dc) in steps]
 
