@@ -223,7 +223,7 @@ class Board:
         Returns:
             Board: Half-board that contains pieces for only one camp.
         """
-        board = cls(Formation.UNDECIDED, Formation.UNDECIDED, Camp.UNDEDCIDED)
+        board = cls(Formation.UNDECIDED, Formation.UNDECIDED, Camp.UNDECIDED)
         board.put(6, 0, Piece(PieceType.SOLDIER))
         board.put(6, 2, Piece(PieceType.SOLDIER))
         board.put(6, 4, Piece(PieceType.SOLDIER))

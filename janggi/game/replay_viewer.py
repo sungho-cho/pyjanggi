@@ -9,7 +9,7 @@ class ReplayViewer:
     """Display replay of a single game using GameWindow."""
 
     def __init__(self, game_log: GameLog):
-        self.game_window = GameWindow(game_log.board_logs[0])
+        self.game_window = GameWindow(game_log.board_log[0])
         self.game_log = game_log
 
     def run(self):

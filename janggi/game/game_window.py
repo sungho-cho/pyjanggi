@@ -60,7 +60,7 @@ class GameWindow:
 
     def _initialize_piece_images(self):
         for camp in Camp:
-            if camp == Camp.UNDEDCIDED:
+            if camp == Camp.UNDECIDED:
                 continue
             for piece_type in PieceType:
                 piece_path = self._get_image_path(camp, piece_type)

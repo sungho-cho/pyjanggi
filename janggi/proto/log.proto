@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package janggi;
+ 
+enum Camp {
+    CHO = 0;
+    HAN = 1;
+}
+
+enum Formation {
+    INNER_ELEPHANT = 0;
+    OUTER_ELEPHANT = 1;
+    LEFT_ELEPHANT = 2;
+    RIGHT_ELEPHANT = 3;
+}
+
+message Location {
+    int32 row = 1;
+    int32 col = 2;
+}
+
+message Move {
+    Location origin = 1;
+    Location dest = 2;
+}
+
+message Log {
+    Formation cho_formation = 1;
+    Formation han_formation = 2;
+    Camp bottom_camp = 3;
+    repeated Move moves = 4;
+}

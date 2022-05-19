@@ -7,6 +7,7 @@ from ..base.formation import Formation
 from ..base.piece import PieceType
 from ..base.location import Location
 from ..base.move import MoveSet
+from .game_log import GameLog
 
 
 class JanggiGame:
@@ -31,7 +32,7 @@ class JanggiGame:
 
         self.turn = Camp.CHO
         self.cho_score = self.han_score = 0.0
-        self.move_logs = []
+        self.log = GameLog(cho_formation, han_formation, player)
         self.board = Board.full_board_from_formations(cho_formation, han_formation, player)
         self.initial_board = self.board.copy()
         self._update_scores()
@@ -73,7 +74,7 @@ class JanggiGame:
         self.turn = self.turn.opponent
 
         # record move logs
-        self.move_logs.append((origin, dest))
+        self.log.add_move((origin, dest))
 
         return float(piece_value), game_over
 

@@ -1,5 +1,8 @@
+from __future__ import annotations
+from sqlite3 import Row
 from typing import Iterable
 from ..constants import MIN_ROW, MAX_ROW, MIN_COL, MAX_COL
+from ..proto import log_pb2
 
 
 class Location:
@@ -39,3 +42,15 @@ class Location:
     def __eq__(self, other) -> bool:
         """Return True if two location classes have same row and col; False otherwise."""
         return self.row == other.row and self.col == other.col
+
+    @classmethod
+    def from_proto(cls, location_proto: log_pb2.Location) -> Location:
+        """Convert from proto Location message."""
+        return Location(location_proto.row, location_proto.col)
+
+    def to_proto(self) -> log_pb2.Location:
+        """Convert to proto Location message."""
+        location_proto = log_pb2.Location()
+        location_proto.row = self.row
+        location_proto.col = self.col
+        return location_proto

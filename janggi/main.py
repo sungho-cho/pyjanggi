@@ -24,5 +24,6 @@ if __name__ == '__main__':
     # Test replay viewer
     moves = [(Location(3,0), Location(3,1)), (Location(6,8), Location(6,7)), (Location(0,0), Location(4,0))]
     game_log = GameLog(cho_formation, han_formation, camp, moves)
+    game_log.generate_board_log()
     replay_viewer = ReplayViewer(game_log)
     replay_viewer.run()
