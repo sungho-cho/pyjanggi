@@ -89,19 +89,12 @@ class JanggiGame:
         possible_actions = []
         piece_locations = self.board.get_piece_locations_for_camp(self.turn)
         for piece_location in piece_locations:
-            destinations = self._get_all_destinations(piece_location)
+            destinations = self.get_all_destinations(piece_location)
             possible_actions += [(piece_location, dest_location)
                                  for dest_location in destinations]
         return possible_actions
 
-    def _update_scores(self):
-        """
-        Update cho and han's scores by summing up each of their piece's value.
-        """
-        self.cho_score = self.board.get_score(Camp.CHO)
-        self.han_score = self.board.get_score(Camp.HAN) + HAN_ADVANTAGE
-
-    def _get_all_destinations(self, origin: Location) -> List[Location]:
+    def get_all_destinations(self, origin: Location) -> List[Location]:
         """
         List all possible locations where a piece at given origin can move to.
 
@@ -115,6 +108,13 @@ class JanggiGame:
         all_dest = [ms.get_dest(self.board, origin, self.turn)
                     for ms in move_sets]
         return all_dest
+
+    def _update_scores(self):
+        """
+        Update cho and han's scores by summing up each of their piece's value.
+        """
+        self.cho_score = self.board.get_score(Camp.CHO)
+        self.han_score = self.board.get_score(Camp.HAN) + HAN_ADVANTAGE
 
     def _get_possible_move_sets(self, origin: Location) -> List[MoveSet]:
         """
@@ -196,7 +196,7 @@ class JanggiGame:
             return False
 
         # See if destination is in list of all possible destinatins from origin
-        if dest not in self._get_all_destinations(origin):
+        if dest not in self.get_all_destinations(origin):
             return False
 
         # TODO: Invalidate the move makes it enemy's "Janggun"

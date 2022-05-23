@@ -70,11 +70,15 @@ class MoveSet:
             piece = board.get(row, col)
 
             if i == len(self.moves)-1:
+                # invalidate if landing on an ally piece
+                if piece and piece.camp == player:
+                    return False
                 # invalidate if some hurdles are left for a cannon
                 if origin_piece.piece_type == PieceType.CANNON and num_hurdles > 0:
                     return False
-                # invalidate if landing on an ally piece
-                if piece and piece.camp == player:
+                # invalidate if cannon is landing on another cannon
+                if (origin_piece.piece_type == PieceType.CANNON and 
+                    (piece and piece.piece_type == PieceType.CANNON)):
                     return False
 
             elif piece:

@@ -11,7 +11,7 @@ from janggi import GameWindow
 from janggi import ReplayViewer
 
 logging.basicConfig()
-logging.root.setLevel(logging.INFO)
+logging.root.setLevel(logging.DEBUG)
 
 if __name__ == '__main__':
     camp = Camp(random.choice([-1, 1]))

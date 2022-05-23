@@ -7,7 +7,7 @@ from .base.move import MoveSet
 from .base.piece import Piece, PieceType
 from .game.janggi_game import JanggiGame
 from .game.game_log import GameLog
-from .game.game_window import GameWindow
-from .game.replay_viewer import ReplayViewer
+from .ui.game_window import GameWindow
+from .ui.replay_viewer import ReplayViewer
 from .proto import log_pb2
-from .utils import replay
+from .utils import generate_random_game, play, replay
