@@ -149,7 +149,7 @@ class JanggiGame:
 
         # Get MoveSets based on piece type
         if piece.piece_type == PieceType.SOLDIER:
-            move_sets = piece.get_soldier_move_sets(self.player == self.turn)
+            move_sets = piece.get_soldier_move_sets(origin, self.player == self.turn)
         elif piece.piece_type == PieceType.HORSE or piece.piece_type == PieceType.ELEPHANT:
             move_sets = piece.get_jumpy_move_sets()
         elif piece.piece_type == PieceType.CHARIOT or piece.piece_type == PieceType.CANNON:

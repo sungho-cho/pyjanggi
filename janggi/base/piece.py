@@ -7,6 +7,10 @@ from ..constants import (
     CASTLE_MIN_COL, CASTLE_MAX_COL,
     CASTLE_TOP_MIN_ROW, CASTLE_TOP_MAX_ROW,
     CASTLE_BOT_MIN_ROW, CASTLE_BOT_MAX_ROW,
+    CASTLE_TOP_SOLDIER_EXCEPTION_LEFT,
+    CASTLE_TOP_SOLDIER_EXCEPTION_RIGHT,
+    CASTLE_BOT_SOLDIER_EXCEPTION_LEFT,
+    CASTLE_BOT_SOLDIER_EXCEPTION_RIGHT,
 )
 from .camp import Camp
 from .location import Location
@@ -118,7 +122,7 @@ class Piece:
                 else:
                     return "兵"
 
-    def get_soldier_move_sets(self, is_player: bool) -> List[MoveSet]:
+    def get_soldier_move_sets(self, origin: Location, is_player: bool) -> List[MoveSet]:
         """
         Get move sets for soldier pieces.
         The directions a soldier piece can take depends on which camp it belongs to.
@@ -131,6 +135,17 @@ class Piece:
         """
         steps = [(0, -1), (0, 1)]
         steps += [(-1, 0)] if is_player else [(1, 0)]
+        # soldiers can move diagonally in enemy's castle
+        if is_player:
+            if tuple(origin) == CASTLE_TOP_SOLDIER_EXCEPTION_LEFT:
+                steps += [(-1, 1)]
+            elif tuple(origin) == CASTLE_TOP_SOLDIER_EXCEPTION_RIGHT:
+                steps += [(-1, -1)]
+        else:
+            if tuple(origin) == CASTLE_BOT_SOLDIER_EXCEPTION_LEFT:
+                steps += [(1, 1)]
+            elif tuple(origin) == CASTLE_BOT_SOLDIER_EXCEPTION_RIGHT:
+                steps += [(1, -1)]
         return [MoveSet([(dr, dc)]) for (dr, dc) in steps]
 
     def get_castle_move_sets(self, origin: Location, is_player: bool) -> List[MoveSet]:
