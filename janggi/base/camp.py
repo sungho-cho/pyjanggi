@@ -2,6 +2,7 @@ from __future__ import annotations
 from enum import IntEnum
 from ..proto import log_pb2
 
+
 class Camp(IntEnum):
     """
     Enum that represents two sides of the game of Janggi.
@@ -39,4 +40,3 @@ class Camp(IntEnum):
             return log_pb2.Camp.HAN
         else:
             raise Exception(f"Cannot convert Camp enum {self} to proto.")
-        

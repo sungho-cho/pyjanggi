@@ -33,7 +33,8 @@ class JanggiGame:
         self.turn = Camp.CHO
         self.cho_score = self.han_score = 0.0
         self.log = GameLog(cho_formation, han_formation, player)
-        self.board = Board.full_board_from_formations(cho_formation, han_formation, player)
+        self.board = Board.full_board_from_formations(
+            cho_formation, han_formation, player)
         self.initial_board = self.board.copy()
         self._update_scores()
 
@@ -145,17 +146,20 @@ class JanggiGame:
 
         # Invalidate when the piece does not belong to the current player
         if piece.camp != self.turn:
-            raise Exception(f"The piece {piece.piece_type} does not belong to the current player {self.turn}.")
+            raise Exception(
+                f"The piece {piece.piece_type} does not belong to the current player {self.turn}.")
 
         # Get MoveSets based on piece type
         if piece.piece_type == PieceType.SOLDIER:
-            move_sets = piece.get_soldier_move_sets(origin, self.player == self.turn)
+            move_sets = piece.get_soldier_move_sets(
+                origin, self.player == self.turn)
         elif piece.piece_type == PieceType.HORSE or piece.piece_type == PieceType.ELEPHANT:
             move_sets = piece.get_jumpy_move_sets()
         elif piece.piece_type == PieceType.CHARIOT or piece.piece_type == PieceType.CANNON:
             move_sets = piece.get_straight_move_sets(origin)
         elif piece.piece_type == PieceType.GENERAL or piece.piece_type == PieceType.GUARD:
-            move_sets = piece.get_castle_move_sets(origin, self.player == self.turn)
+            move_sets = piece.get_castle_move_sets(
+                origin, self.player == self.turn)
 
         # Filter out all the invalid move sets
         move_sets = [ms for ms in move_sets if ms.is_valid(

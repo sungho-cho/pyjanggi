@@ -5,6 +5,7 @@ from pygame.locals import *
 from ..game.game_log import GameLog
 from .game_window import GameWindow
 
+
 class ReplayViewer:
     """Display replay of a single game using GameWindow."""
 
@@ -34,6 +35,3 @@ class ReplayViewer:
                         self.window.render()
                 except StopIteration:
                     logging.info("Reached end of the game log.")
-
-
-

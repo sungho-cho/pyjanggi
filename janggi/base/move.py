@@ -13,6 +13,7 @@ class MoveSet:
     If a player makes an action to move a Chariot piece 3 tiles up,
     its move set will be [(-1,0), (-1,0), (-1,0)].
     """
+
     def __init__(self, moves: List[Tuple[int, int]]):
         """Initialize MoveSet with the given list of moves."""
         self.moves = moves
@@ -77,8 +78,8 @@ class MoveSet:
                 if origin_piece.piece_type == PieceType.CANNON and num_hurdles > 0:
                     return False
                 # invalidate if cannon is landing on another cannon
-                if (origin_piece.piece_type == PieceType.CANNON and 
-                    (piece and piece.piece_type == PieceType.CANNON)):
+                if (origin_piece.piece_type == PieceType.CANNON and
+                        (piece and piece.piece_type == PieceType.CANNON)):
                     return False
 
             elif piece:

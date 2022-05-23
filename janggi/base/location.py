@@ -9,6 +9,7 @@ class Location:
     """
     Location class that each represents a single location on the board grid.
     """
+
     def __init__(self, row: int, col: int):
         """
         Initialize location.

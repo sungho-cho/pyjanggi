@@ -19,8 +19,10 @@ ROW_GAP, COL_GAP = 50, 55
 IMG_PATH = "images/"
 BOARD_FILENAME = "board.png"
 
+
 class GameWindow:
     """Class that renders board display using pygame."""
+
     def __init__(self, board: Optional[Board] = None):
         pygame.init()
         pygame.display.init()
@@ -39,16 +41,17 @@ class GameWindow:
         # Draw pieces
         if self.board:
             for row, col in self.board.get_piece_locations():
-                piece = self.board.get(row,col)
+                piece = self.board.get(row, col)
                 if piece.camp is None:
-                    logging.warning(f"(GameWindow) Camp is not assigned for piece {piece.piece_type}")
+                    logging.warning(
+                        f"(GameWindow) Camp is not assigned for piece {piece.piece_type}")
                     continue
                 piece_img = self.piece_imgs[piece.camp][piece.piece_type]
                 x, y = self.get_board_xy(row, col)
                 self.display.blit(
-                    piece_img, 
+                    piece_img,
                     (
-                        x - PIECE_WIDTH // 2, 
+                        x - PIECE_WIDTH // 2,
                         y - PIECE_HEIGHT // 2
                     )
                 )
@@ -68,15 +71,16 @@ class GameWindow:
 
     def get_board_xy(self, row: int, col: int):
         return (
-            BOARD_X + COL_GAP * col + PIECE_WIDTH // 2, 
+            BOARD_X + COL_GAP * col + PIECE_WIDTH // 2,
             BOARD_Y + ROW_GAP * row + PIECE_HEIGHT // 2
         )
-    
+
     def _initialize_board_image(self):
         board_path = os.path.join(IMG_PATH, BOARD_FILENAME)
         board_file = pkg_resources.resource_filename(__name__, board_path)
         board_img = pygame.image.load(board_file)
-        self.board_img = pygame.transform.scale(board_img, (BOARD_WIDTH, BOARD_HEIGHT))
+        self.board_img = pygame.transform.scale(
+            board_img, (BOARD_WIDTH, BOARD_HEIGHT))
 
     def _initialize_piece_images(self):
         for camp in Camp:
@@ -84,7 +88,8 @@ class GameWindow:
                 continue
             for piece_type in PieceType:
                 piece_path = self._get_image_path(camp, piece_type)
-                piece_file = pkg_resources.resource_filename(__name__, piece_path)
+                piece_file = pkg_resources.resource_filename(
+                    __name__, piece_path)
                 piece_img = pygame.image.load(piece_file)
                 self.piece_imgs[camp][piece_type] = pygame.transform.scale(
                     piece_img, (PIECE_WIDTH, PIECE_HEIGHT))

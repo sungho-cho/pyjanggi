@@ -2,6 +2,7 @@ import pygame
 
 GREEN = (0, 255, 0)
 
+
 class BoardMarker:
     def __init__(self, screen, x: int, y: int):
         self.screen = screen

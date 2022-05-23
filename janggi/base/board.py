@@ -14,6 +14,7 @@ class Board:
     Simple board class used for the game of Janggi. Contains and handles a single 
     10x9 two-dimensional list that contains either a Piece object or None.
     """
+
     def __init__(self, cho_formation: Formation, han_formation: Formation, bottom_camp: Camp):
         self.cho_formation = cho_formation
         self.han_formation = han_formation
@@ -74,7 +75,8 @@ class Board:
         Returns:
             Board: Copied version of the board.
         """
-        copied_board = Board(self.cho_formation, self.han_formation, self.bottom_camp)
+        copied_board = Board(self.cho_formation,
+                             self.han_formation, self.bottom_camp)
         copied_board.__board = self.__board.copy()
         return copied_board
 
@@ -148,7 +150,8 @@ class Board:
         for row in range(MIN_ROW, MAX_ROW+1):
             for col in range(MIN_COL, MAX_COL+1):
                 if self.__board[row][col]:
-                    new_board[NUM_ROWS-row-1][NUM_COLS-col-1] = self.__board[row][col]
+                    new_board[NUM_ROWS-row-1][NUM_COLS -
+                                              col-1] = self.__board[row][col]
         self.__board = new_board
 
     def mark_camp(self, camp: Camp):

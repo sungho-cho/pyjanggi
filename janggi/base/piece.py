@@ -1,3 +1,4 @@
+from .move import MoveSet  # Imported here to avoid an import loop.
 from enum import Enum
 from termcolor import colored
 from typing import List
@@ -26,6 +27,7 @@ class PieceType(Enum):
     CANNON = 6
     SOLDIER = 7
 
+
 PIECE_VALUE = {
     PieceType.GUARD: 3,
     PieceType.HORSE: 5,
@@ -36,12 +38,13 @@ PIECE_VALUE = {
     PieceType.GENERAL: 0,
 }
 
-from .move import MoveSet # Imported here to avoid an import loop.
+
 class Piece:
     """
     Piece class represents a single piece on the game board.
     The class is capable of getting move sets based on its piece type.
     """
+
     def __init__(self, piece_type: PieceType):
         """
         Initialize Piece class by setting the given piece type.
@@ -162,10 +165,12 @@ class Piece:
         """
         def _is_out_of_bound(row: int, col: int):
             return (col < CASTLE_MIN_COL or col > CASTLE_MAX_COL or
-                (is_player and (row < CASTLE_BOT_MIN_ROW or row > CASTLE_BOT_MAX_ROW)) or
-                (not is_player and (row < CASTLE_TOP_MIN_ROW or row > CASTLE_TOP_MAX_ROW)))
-        steps = [(i, j) for i in range(-1, 2) for j in range(-1, 2) if i != 0 or j != 0]
-        steps = [(i, j) for (i, j) in steps if not _is_out_of_bound(origin.row+i, origin.col+j)]
+                    (is_player and (row < CASTLE_BOT_MIN_ROW or row > CASTLE_BOT_MAX_ROW)) or
+                    (not is_player and (row < CASTLE_TOP_MIN_ROW or row > CASTLE_TOP_MAX_ROW)))
+        steps = [(i, j) for i in range(-1, 2)
+                 for j in range(-1, 2) if i != 0 or j != 0]
+        steps = [(i, j) for (i, j) in steps if not _is_out_of_bound(
+            origin.row+i, origin.col+j)]
         return [MoveSet([(dr, dc)]) for (dr, dc) in steps]
 
     def get_jumpy_move_sets(self) -> List[MoveSet]:

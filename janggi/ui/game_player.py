@@ -8,18 +8,21 @@ from ..constants import MIN_ROW, MAX_ROW, MIN_COL, MAX_COL
 from ..game.janggi_game import JanggiGame
 from .game_window import (
     GameWindow,
-    BOARD_X, BOARD_Y, 
+    BOARD_X, BOARD_Y,
     ROW_GAP, COL_GAP,
 )
 from .marker import BoardMarker
+
 
 class MoveSelection:
     def __init__(self, origin: Location, dest: List[Location]):
         self.origin = origin
         self.dest = dest
 
+
 class GamePlayer:
     """Class used to play the game."""
+
     def __init__(self, game: JanggiGame):
         self.game = game
         self.window = GameWindow(game.board)
@@ -37,7 +40,7 @@ class GamePlayer:
                 if event.key == K_ESCAPE:
                     self.window.close()
                     return
-            if event.type == MOUSEBUTTONUP and event.button == 1: # left click
+            if event.type == MOUSEBUTTONUP and event.button == 1:  # left click
                 mousex, mousey = pygame.mouse.get_pos()
                 row, col, success = self._get_board_row_col(mousex, mousey)
                 if success:
@@ -75,11 +78,11 @@ class GamePlayer:
         self.move_selection = MoveSelection(Location(row, col), dest)
         self.window.board_markers = [
             BoardMarker(
-                self.window.display, 
+                self.window.display,
                 *(self.window.get_board_xy(dest_row, dest_col)),
             ) for dest_row, dest_col in dest
         ]
-    
+
     def _clear_selection(self):
         self.move_selection = []
         self.window.board_markers = []

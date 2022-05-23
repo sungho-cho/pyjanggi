@@ -12,6 +12,7 @@ from .proto import log_pb2
 logging.basicConfig()
 logging.root.setLevel(logging.DEBUG)
 
+
 def replay(filepath: str):
     """
     Replay a game by parsing the log file at the given path.
@@ -27,6 +28,7 @@ def replay(filepath: str):
     replay_viewer = ReplayViewer(game_log)
     replay_viewer.run()
 
+
 def play(game: JanggiGame):
     """
     Play a game by running GamePlayer.
@@ -36,6 +38,7 @@ def play(game: JanggiGame):
     """
     player = GamePlayer(game)
     player.run()
+
 
 def generate_random_game():
     """Generate a random Janggi game."""

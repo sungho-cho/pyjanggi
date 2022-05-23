@@ -6,10 +6,12 @@ from ..base.formation import Formation
 from ..base.location import Location
 from ..proto import log_pb2
 
+
 class GameLog:
     """Simple class that represents list of moves made in a janggi game."""
-    def __init__(self, cho_formation: Formation, han_formation: Formation, 
-        bottom_camp: Camp, moves: Optional[List[Tuple[Location, Location]]] = []):
+
+    def __init__(self, cho_formation: Formation, han_formation: Formation,
+                 bottom_camp: Camp, moves: Optional[List[Tuple[Location, Location]]] = []):
         self.cho_formation = cho_formation
         self.han_formation = han_formation
         self.bottom_camp = bottom_camp
@@ -17,7 +19,7 @@ class GameLog:
         self.board_log = []
         self.index = 0
 
-    def add_move(self, move: Tuple[Location ,Location]):
+    def add_move(self, move: Tuple[Location, Location]):
         """
         Add a single move to the move log
 
