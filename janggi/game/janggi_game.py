@@ -67,6 +67,7 @@ class JanggiGame:
             piece_value = piece_removed.value
             if piece_removed.piece_type == PieceType.GENERAL:
                 game_over = True
+                piece_value = 100
 
         # update cho and han's scores
         self._update_scores()
