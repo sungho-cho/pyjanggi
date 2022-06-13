@@ -42,6 +42,8 @@ Return a copied Board class.
 Returns:
 
     Board: Copied version of the board.
+    
+
 * **Return type**
 
     `Board`
@@ -60,6 +62,7 @@ Args:
 Returns:
 
     Board: Full Board class.
+
 * **Return type**
 
     `Board`
@@ -77,6 +80,7 @@ Args:
 Returns:
 
     Piece: Piece located at (row,col) on the board. Can be None.
+
 * **Return type**
 
     `Piece`
@@ -89,6 +93,7 @@ Get locations of all pieces on the board.
 Returns:
 
     List[Location]: List of all locations of the pieces on the board.
+
 * **Return type**
 
     `List`[`Location`]
@@ -105,6 +110,7 @@ Args:
 Returns:
 
     List[Location]: List of all locations of the pieces with the given camp.
+
 * **Return type**
 
     `List`[`Location`]
@@ -121,6 +127,7 @@ Args:
 Returns:
 
     int: Score of the player who’s playing the given camp.
+
 * **Return type**
 
     `int`
@@ -152,6 +159,7 @@ Args:
 
     origin (Location): Original location of the piece being played.
     dest (Location): Destination of the piece being played.
+
 * **Return type**
 
     `Optional`[`Piece`]
@@ -209,6 +217,7 @@ Return opponent’s enum. (Camp.CHO for Camp.HAN / Camp.HAN for Camp.CHO).
 Returns:
 
     Camp: Opponent’s enum instance.
+
 * **Return type**
 
     `Camp`
@@ -275,6 +284,7 @@ Raises:
 
 #### _classmethod_ from_proto(location_proto)
 Convert from proto Location message.
+
 * **Return type**
 
     `Location`
@@ -283,6 +293,7 @@ Convert from proto Location message.
 
 #### to_proto()
 Convert to proto Location message.
+
 * **Return type**
 
     [`Location`](janggi.proto.md#janggi.proto.log_pb2.Location)
@@ -316,6 +327,7 @@ Args:
 Returns:
 
     Location: Destination of the piece if it’s played through self.moves from origin.
+
 * **Return type**
 
     `Location`
@@ -334,6 +346,7 @@ Args:
 Returns:
 
     bool: True if move set is valid; False otherwise
+
 * **Return type**
 
     `bool`
@@ -366,6 +379,7 @@ Args:
 Returns:
 
     List[MoveSet]: All move sets a castle piece can make regardless of validity.
+
 * **Return type**
 
     `List`[`MoveSet`]
@@ -378,6 +392,7 @@ Get move sets for jumpy pieces (horses and elephants).
 Returns:
 
     List[MoveSet]: All move sets a jumpy piece can make regardless of validity.
+
 * **Return type**
 
     `List`[`MoveSet`]
@@ -395,6 +410,7 @@ Args:
 Returns:
 
     List[MoveSet]: All move sets a soldier piece can make regardless of validity.
+
 * **Return type**
 
     `List`[`MoveSet`]
@@ -408,9 +424,10 @@ Args:
 
     origin (Location): Original location of the piece.
 
-Returns:s
+Returns:
 
     List[MoveSet]: All move sets a straight piece can make regardless of validity.
+
 * **Return type**
 
     `List`[`MoveSet`]
@@ -424,6 +441,7 @@ value assigned, and the values contribute to the players’ current scores.
 Returns:
 
     int: piece’s value based on type.
+
 * **Return type**
 
     `int`
@@ -489,6 +507,8 @@ Class that renders board display using pygame.
 #### render()
 
 #### switch_board(board)
+
+
 ## janggi.ui.marker module
 
 
@@ -499,6 +519,8 @@ Bases: `object`
 #### \__init__(screen, x, y)
 
 #### draw()
+
+
 ## janggi.ui.replay_viewer module
 
 
@@ -509,6 +531,7 @@ Display replay of a single game using GameWindow.
 
 
 #### \__init__(game_log)
+
 
 #### run()
 
@@ -607,6 +630,7 @@ Convert from proto Log message.
 
 #### next()
 Used to access the next board when iterating through self.board_logs.
+
 * **Return type**
 
     [`Board`](janggi.base.md#janggi.base.board.Board)
@@ -615,6 +639,7 @@ Used to access the next board when iterating through self.board_logs.
 
 #### prev()
 Used to access the previous board when iterating through self.board_logs.
+
 * **Return type**
 
     [`Board`](janggi.base.md#janggi.base.board.Board)
@@ -654,6 +679,7 @@ Returns:
     List[Tuple[Location, Location]]: List of moves in (origin, dest) format 
 
         where it means a piece at origin location being moved to dest location.
+
 * **Return type**
 
     `List`[`Tuple`[[`Location`](janggi.base.md#janggi.base.location.Location), [`Location`](janggi.base.md#janggi.base.location.Location)]]
@@ -670,6 +696,7 @@ Args:
 Returns:
 
     List[Location]: List of all possible locations the piece can go to.
+
 * **Return type**
 
     `List`[[`Location`](janggi.base.md#janggi.base.location.Location)]
@@ -692,6 +719,7 @@ Returns:
 
     piece_value (float): An enemy piece’s value if it was killed; 0 otherwise.
     game_over (bool): True if the action ends the game; False otherwise.
+
 * **Return type**
 
     `Tuple`[`float`, `bool`]
