@@ -30,6 +30,8 @@ Check out the [GitHub Page](https://sungho-cho.github.io/pyjanggi/) for package 
 
     Check out the [Documentation](#documentation) section for more details
 
+    You can also check out the [gym-janggi](https://github.com/sungho-cho/gym-janggi/blob/main/gym_janggi/envs/janggi.py) repository to learn how PyJanggi package can be utilized.
+
 ### Testing Functionality
 PyJanggi is originally designed to be imported by other packages and provide Janggi game logic and classes, but if you want to check if the PyJanggi package is working, you can follow these steps:
 
