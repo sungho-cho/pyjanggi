@@ -187,7 +187,7 @@ Args:
     col (int): Column of the piece to be removed.
 
 
-#### rotate()
+#### flip()
 Rotate the board 180 degrees and update self.__board.
 
 

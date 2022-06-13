@@ -60,9 +60,9 @@ class Board:
         cho_half_board.mark_camp(Camp.CHO)
         han_half_board.mark_camp(Camp.HAN)
         if player == Camp.CHO:
-            han_half_board.rotate()
+            han_half_board.flip()
         else:
-            cho_half_board.rotate()
+            cho_half_board.flip()
         board.merge(cho_half_board)
         board.merge(han_half_board)
 
@@ -144,15 +144,9 @@ class Board:
         self.remove(origin.row, origin.col)
         return piece_to_remove
 
-    def rotate(self):
+    def flip(self):
         """Rotate the board 180 degrees and update self.__board."""
-        new_board = np.full((NUM_ROWS, NUM_COLS), None)
-        for row in range(MIN_ROW, MAX_ROW+1):
-            for col in range(MIN_COL, MAX_COL+1):
-                if self.__board[row][col]:
-                    new_board[NUM_ROWS-row-1][NUM_COLS -
-                                              col-1] = self.__board[row][col]
-        self.__board = new_board
+        self.__board = np.flip(self.__board)
 
     def mark_camp(self, camp: Camp):
         """
