@@ -1,6 +1,6 @@
 # PyJanggi
 
-<img width="612" alt="Screen Shot 2022-06-13 at 6 04 29 PM" src="https://user-images.githubusercontent.com/46757971/173320609-075acc71-0f0a-47d6-9082-2418ca2775e8.png">
+<img width="400" alt="Screen Shot 2022-06-13 at 6 04 29 PM" src="https://user-images.githubusercontent.com/46757971/173320609-075acc71-0f0a-47d6-9082-2418ca2775e8.png">
 
 PyJanggi is a Python library for a Korean chess called [Janggi](https://en.wikipedia.org/wiki/Janggi).
 It provides functionalities to simulate a game, maintain a game board, list all possible moves, make a move, and validate a move.
