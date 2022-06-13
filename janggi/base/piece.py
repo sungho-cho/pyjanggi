@@ -1,4 +1,3 @@
-from .move import MoveSet  # Imported here to avoid an import loop.
 from enum import Enum
 from termcolor import colored
 from typing import List
@@ -27,7 +26,6 @@ class PieceType(Enum):
     CANNON = 6
     SOLDIER = 7
 
-
 PIECE_VALUE = {
     PieceType.GUARD: 3,
     PieceType.HORSE: 5,
@@ -38,6 +36,7 @@ PIECE_VALUE = {
     PieceType.GENERAL: 0,
 }
 
+from .move import MoveSet  # Imported here to avoid circular import.
 
 class Piece:
     """

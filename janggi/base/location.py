@@ -1,5 +1,4 @@
 from __future__ import annotations
-from sqlite3 import Row
 from typing import Iterable
 from ..constants import MIN_ROW, MAX_ROW, MIN_COL, MAX_COL
 from ..proto import log_pb2
