@@ -52,7 +52,7 @@ PyJanggi is originally designed to be imported by other packages and provide Jan
 
 
 ## Releases
-Check out the [PyPi Package](https://pypi.org/project/janggi) for releases
+Check out the [PyPi Package](https://pypi.org/project/janggi) for releases.
 
 ## License
-[MIT License](LICENSE)
+This package is licensed under the [MIT License](LICENSE).
