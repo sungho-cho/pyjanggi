@@ -1,16 +1,13 @@
 from enum import Enum
 from termcolor import colored
-from typing import List
+from typing import List, Tuple
 
 from ..constants import (
     MIN_ROW, MAX_ROW, MIN_COL, MAX_COL,
     CASTLE_MIN_COL, CASTLE_MAX_COL,
     CASTLE_TOP_MIN_ROW, CASTLE_TOP_MAX_ROW,
     CASTLE_BOT_MIN_ROW, CASTLE_BOT_MAX_ROW,
-    CASTLE_TOP_SOLDIER_EXCEPTION_LEFT,
-    CASTLE_TOP_SOLDIER_EXCEPTION_RIGHT,
-    CASTLE_BOT_SOLDIER_EXCEPTION_LEFT,
-    CASTLE_BOT_SOLDIER_EXCEPTION_RIGHT,
+    CASTLE_TOP_CENTER, CASTLE_BOT_CENTER,
 )
 from .camp import Camp
 from .location import Location
@@ -26,6 +23,7 @@ class PieceType(Enum):
     CANNON = 6
     SOLDIER = 7
 
+
 PIECE_VALUE = {
     PieceType.GUARD: 3,
     PieceType.HORSE: 5,
@@ -37,6 +35,7 @@ PIECE_VALUE = {
 }
 
 from .move import MoveSet  # Imported here to avoid circular import.
+
 
 class Piece:
     """
@@ -135,22 +134,28 @@ class Piece:
         Returns:
             List[MoveSet]: All move sets a soldier piece can make regardless of validity.
         """
+        def _is_forward(move_set: MoveSet) -> bool:
+            for (dr, _) in move_set.moves:
+                if (is_player and dr > 0) or (not is_player and dr < 0):
+                    return False
+            return True
         steps = [(0, -1), (0, 1)]
         steps += [(-1, 0)] if is_player else [(1, 0)]
-        # soldiers can move diagonally in enemy's castle
-        if is_player:
-            if tuple(origin) == CASTLE_TOP_SOLDIER_EXCEPTION_LEFT:
-                steps += [(-1, 1)]
-            elif tuple(origin) == CASTLE_TOP_SOLDIER_EXCEPTION_RIGHT:
-                steps += [(-1, -1)]
-        else:
-            if tuple(origin) == CASTLE_BOT_SOLDIER_EXCEPTION_LEFT:
-                steps += [(1, 1)]
-            elif tuple(origin) == CASTLE_BOT_SOLDIER_EXCEPTION_RIGHT:
-                steps += [(1, -1)]
-        return [MoveSet([(dr, dc)]) for (dr, dc) in steps]
+        move_sets = [MoveSet([(dr, dc)]) for (dr, dc) in steps]
+        # Add castle move sets
+        is_in_castle = self._is_in_castle(origin)
+        if is_in_castle > -1:
+            castle_move_sets = self.get_castle_move_sets(
+                origin, is_in_castle, 1)
+            castle_move_sets = filter(_is_forward, castle_move_sets)
+            move_sets.extend(castle_move_sets)
+        return move_sets
 
-    def get_castle_move_sets(self, origin: Location, is_player: bool) -> List[MoveSet]:
+    def get_castle_move_sets(
+            self,
+            origin: Location,
+            is_player: bool,
+            max_step: int = 1) -> List[MoveSet]:
         """
         Get move sets for castle pieces (generals and guards).
         The directions a soldier piece can take depends on which camp it belongs to.
@@ -162,15 +167,22 @@ class Piece:
         Returns:
             List[MoveSet]: All move sets a castle piece can make regardless of validity.
         """
-        def _is_out_of_bound(row: int, col: int):
-            return (col < CASTLE_MIN_COL or col > CASTLE_MAX_COL or
-                    (is_player and (row < CASTLE_BOT_MIN_ROW or row > CASTLE_BOT_MAX_ROW)) or
-                    (not is_player and (row < CASTLE_TOP_MIN_ROW or row > CASTLE_TOP_MAX_ROW)))
-        steps = [(i, j) for i in range(-1, 2)
-                 for j in range(-1, 2) if i != 0 or j != 0]
-        steps = [(i, j) for (i, j) in steps if not _is_out_of_bound(
-            origin.row+i, origin.col+j)]
-        return [MoveSet([(dr, dc)]) for (dr, dc) in steps]
+        castle_locations = self._castle_locations(is_player)
+        move_sets = []
+        for dest in castle_locations:
+            dr = dest.row - origin.row
+            dc = dest.col - origin.col
+            if origin == dest:
+                continue
+            if max(abs(dr), abs(dc)) > max_step:
+                continue
+            if self._is_move_diagonal(dr, dc) and not self._validate_castle_diagonal_move(origin, dest):
+                continue
+            dr_per_step = -1 if dr < 0 else 1 if dr > 0 else 0
+            dc_per_step = -1 if dc < 0 else 1 if dc > 0 else 0
+            move_sets.append(
+                MoveSet([(dr_per_step, dc_per_step)] * max(abs(dr), abs(dc))))
+        return move_sets
 
     def get_jumpy_move_sets(self) -> List[MoveSet]:
         """
@@ -218,7 +230,7 @@ class Piece:
             (row, col) = (origin.row, origin.col)
             steps = []
             move_sets = []
-            while not _is_out_of_bound(row+dr, col+dc):
+            while not _is_out_of_bound(row + dr, col + dc):
                 row += dr
                 col += dc
                 steps.append((dr, dc))
@@ -226,6 +238,52 @@ class Piece:
             return move_sets
 
         move_sets = []
+        # Add regular move sets
         for (dr, dc) in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
             move_sets += _get_move_sets_in_direction(origin, dr, dc)
+        # Add castle move sets
+        is_in_castle = self._is_in_castle(origin)
+        if is_in_castle > -1:
+            castle_move_sets = self.get_castle_move_sets(
+                origin, is_in_castle, 2)
+            move_sets.extend(castle_move_sets)
         return move_sets
+
+    # **************************************************
+    # *********** Castle Helper Functions **************
+    # **************************************************
+
+    # Return 1 if in bottom castle, 0 if in top castle, -1 if not in csatle
+    def _is_in_castle(self, l: Location) -> int:
+        if l.col < CASTLE_MIN_COL and l.col > CASTLE_MAX_COL:
+            return -1
+        elif l.row >= CASTLE_TOP_MIN_ROW and l.row <= CASTLE_TOP_MAX_ROW:
+            return 0
+        elif l.row >= CASTLE_BOT_MIN_ROW and l.row <= CASTLE_BOT_MAX_ROW:
+            return 1
+        else:
+            return -1
+
+    def _is_move_diagonal(self, drow: int, dcol: int) -> bool:
+        return drow != 0 and dcol != 0 and abs(drow) == abs(dcol)
+
+    def _is_castle_vertex(self, l: Location) -> bool:
+        return \
+            (l.col == CASTLE_MIN_COL or l.col == CASTLE_MAX_COL) and\
+            (l.row == CASTLE_TOP_MIN_ROW or l.row == CASTLE_TOP_MAX_ROW or
+             l.row == CASTLE_BOT_MIN_ROW or l.row == CASTLE_BOT_MAX_ROW)
+
+    # Return true if either origin or destination is castle's center
+    def _validate_castle_diagonal_move(self, origin: Location, dest: Location) -> bool:
+        return (tuple(origin) == CASTLE_TOP_CENTER or
+                tuple(dest) == CASTLE_TOP_CENTER or
+                tuple(origin) == CASTLE_BOT_CENTER or
+                tuple(dest) == CASTLE_BOT_CENTER or
+                (self._is_castle_vertex(origin) and self._is_castle_vertex(dest)))
+
+    def _castle_locations(self, is_player: bool) -> List[Location]:
+        min_row = CASTLE_BOT_MIN_ROW if is_player else CASTLE_TOP_MIN_ROW
+        max_row = CASTLE_BOT_MAX_ROW if is_player else CASTLE_TOP_MAX_ROW
+        min_col = CASTLE_MIN_COL
+        max_col = CASTLE_MAX_COL
+        return [Location(r, c) for r in range(min_row, max_row + 1) for c in range(min_col, max_col + 1)]
